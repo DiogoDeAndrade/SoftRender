@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{A31926D2-8DFE-4053-BA11-E2368F4ADE11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL2", "SDL2\SDL2.csproj", "{F73EE077-B663-4B23-9E48-FD91028AC844}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "Samples", "{43D90D9F-09F0-433C-98AA-D4EBF1CEFCC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearScreen", "Samples\ClearScreen\ClearScreen.csproj", "{4308BD4E-D5DE-4C7F-B2F3-DACBAD5F8AEA}"
