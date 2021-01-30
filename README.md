@@ -16,6 +16,15 @@ Just need to install sdl2, using for example brew:
 brew install sdl2
 ```
 
+### Linus
+
+Just need to install sdl2, using for example apt-get:
+
+```
+apt install libsdl2-dev
+```
+
+
 ## Licenses
 
 Engine code developed by [Diogo de Andrade][DAndrade] and is made available under the [Mozilla Public License 2.0][MPLv2].
