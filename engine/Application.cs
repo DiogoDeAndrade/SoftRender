@@ -54,18 +54,20 @@ namespace SoftRender
             {
 
                 SDL.SDL_Event evt;
-                SDL.SDL_PollEvent(out evt);
-                switch (evt.type)
+                while (SDL.SDL_PollEvent(out evt) != 0)
                 {
-                    case SDL.SDL_EventType.SDL_QUIT:
-                        exit = true;
-                        break;
-                    case SDL.SDL_EventType.SDL_KEYDOWN:
-                        if (evt.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE)
-                        {
+                    switch (evt.type)
+                    {
+                        case SDL.SDL_EventType.SDL_QUIT:
                             exit = true;
-                        }
-                        break;
+                            break;
+                        case SDL.SDL_EventType.SDL_KEYDOWN:
+                            if ((evt.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE) && ((evt.key.keysym.mod & SDL.SDL_Keymod.KMOD_SHIFT) != 0))
+                            {
+                                exit = true;
+                            }
+                            break;
+                    }
                 }
 
                 Loop();
@@ -123,9 +125,28 @@ namespace SoftRender
         {
             var surfaceData = (SDL.SDL_Surface)System.Runtime.InteropServices.Marshal.PtrToStructure(dest, typeof(SDL.SDL_Surface));
 
-            fixed (byte* srcData = &src.data[0].r)
+            if (surfaceData.pitch == surfaceData.w * 4)
             {
-                Buffer.MemoryCopy(srcData, surfaceData.pixels.ToPointer(), src.width * src.height * 4, src.width * src.height * 4);
+                fixed (byte* srcData = &src.data[0].r)
+                {
+                    Buffer.MemoryCopy(srcData, surfaceData.pixels.ToPointer(), src.width * src.height * 4, src.width * src.height * 4);
+                }
+            }
+            else
+            {
+                var destData = surfaceData.pixels;
+                fixed (byte* srcData = &src.data[0].r)
+                {
+                    byte* srcLine = srcData;
+                    
+                    for (int y = 0; y < src.height; y++)
+                    {
+                        Buffer.MemoryCopy(srcLine, destData.ToPointer(), src.width * src.height * 4, src.width * 4);
+
+                        srcLine += src.width * 4;
+                        destData += surfaceData.pitch;
+                    }
+                }
             }
         }
 
