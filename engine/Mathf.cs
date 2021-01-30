@@ -14,5 +14,6 @@ namespace SoftRender
         public static float Abs(float v) { return MathF.Abs(v); }
         public static float Min(float a, float b) { return MathF.Min(a, b); }
         public static float Max(float a, float b) { return MathF.Max(a, b); }
+        public static float Sqrt(float v) { return MathF.Sqrt(v); }
     }
 }

@@ -48,5 +48,35 @@ namespace SoftRender
         {
             get { return (Color32)opaqueColor; }
         }
+
+        static public Vector2 normalizedVector2
+        {
+            get { return vector2.normalized; }
+        }
+
+        static public Vector2 vector2
+        {
+            get { return new Vector2(Range(-1.0f, 1.0f), Range(-1.0f, 1.0f)); }
+        }
+
+        static public Vector3 normalizedVector3
+        {
+            get { return vector3.normalized; }
+        }
+
+        static public Vector3 vector3
+        {
+            get { return new Vector3(Range(-1.0f, 1.0f), Range(-1.0f, 1.0f), Range(-1.0f, 1.0f)); }
+        }
+
+        static public Vector4 normalizedVector4
+        {
+            get { return vector4.normalized; }
+        }
+
+        static public Vector4 vector4
+        {
+            get { return new Vector4(Range(-1.0f, 1.0f), Range(-1.0f, 1.0f), Range(-1.0f, 1.0f), Range(-1.0f, 1.0f)); }
+        }
     }
 }

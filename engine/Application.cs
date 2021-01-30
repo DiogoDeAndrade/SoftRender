@@ -35,18 +35,18 @@ namespace SoftRender
 
         public bool Run()
         {
-            if (!Initialize())
-            {
-                return false;
-            }
-
             if (!Startup())
             {
                 return false;
             }
 
+            if (!Initialize())
+            {
+                return false;
+            }
+
             currentTimestamp = DateTime.Now.Ticks;
-            deltaTime = 60.0f / 1000.0f;
+            deltaTime = 1.0f / 60.0f;
             currentTime = 0;
 
             exit = false;
@@ -67,6 +67,17 @@ namespace SoftRender
                                 exit = true;
                             }
                             break;
+                        case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                            {
+                                // Get mouse position
+                                int x, y;
+                                SDL.SDL_GetMouseState(out x, out y);
+                                // Convert from window coordinates to screen buffer coordinates
+                                float mx = (x / (float)windowResX) * resX;
+                                float my = (y / (float)windowResY) * resY;
+                                OnMouseDown(mx, my);
+                            }
+                            break;
                     }
                 }
 
@@ -80,6 +91,9 @@ namespace SoftRender
 
                 long t = DateTime.Now.Ticks;
                 deltaTime = (t - currentTimestamp) *10e-7f;
+#if DEBUG
+                if (deltaTime > 0.1) deltaTime = 0.1f;
+#endif
                 currentTime += deltaTime;
                 currentTimestamp = t;
             }
@@ -162,6 +176,11 @@ namespace SoftRender
         }
 
         virtual protected void Cleanup()
+        {
+
+        }
+
+        virtual protected void OnMouseDown(float x, float y)
         {
 
         }
