@@ -12,9 +12,9 @@ On Windows, nothing should be needed, the SDL.dll library is included.
 
 Just need to install sdl2, using for example brew:
 
-'''
+```
 brew install sdl2
-'''
+```
 
 ## Licenses
 
