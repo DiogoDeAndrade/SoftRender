@@ -12,7 +12,7 @@ namespace SoftRender
 
             if (!app.Run())
             {
-                Console.WriteLine("Failed to run application!");
+                Debug.Log("Failed to run application!");
             }
         }
     }

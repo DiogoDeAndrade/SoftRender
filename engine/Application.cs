@@ -6,6 +6,7 @@ namespace SoftRender
     class Application
     {
         IntPtr  window;
+        IntPtr  windowSurface;
         IntPtr  renderer;
         IntPtr  primarySurface;
         long    currentTimestamp;
@@ -71,7 +72,7 @@ namespace SoftRender
 
                 CopyToSurface(screen, primarySurface);
 
-                SDL.SDL_BlitScaled(primarySurface, IntPtr.Zero, SDL.SDL_GetWindowSurface(window), IntPtr.Zero);
+                SDL.SDL_BlitScaled(primarySurface, IntPtr.Zero, windowSurface, IntPtr.Zero);
 
                 SDL.SDL_UpdateWindowSurface(window);
 
@@ -93,16 +94,18 @@ namespace SoftRender
         {
             if (SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING) != 0)
             {
-                Console.WriteLine("Can't initialize SDL2");
+                Debug.Log("Can't initialize SDL2");
                 return false;
             }
 
-            if (SDL.SDL_CreateWindowAndRenderer(windowResX, windowResY, 0, out window, out renderer) != 0)
+            window = SDL.SDL_CreateWindow(name, SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, windowResX, windowResY, 0);
+            if (window == IntPtr.Zero)
             {
-                Console.WriteLine("Can't create window or renderer!");
+                Debug.Log("Can't create window or renderer!");
                 return false;
             }
-            SDL.SDL_SetWindowTitle(window, name);
+            windowSurface = SDL.SDL_GetWindowSurface(window);
+            renderer = SDL.SDL_CreateSoftwareRenderer(windowSurface);
 
             primarySurface = SDL.SDL_CreateRGBSurface(0, resX, resY, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
             screen = new Bitmap(resX, resY);
