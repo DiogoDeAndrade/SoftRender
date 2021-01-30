@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SDL2\SDL2.csproj" />
+    <PackageReference Include="ppy.SDL2-CS" Version="1.0.53" />
   </ItemGroup>
 
   <PropertyGroup>
