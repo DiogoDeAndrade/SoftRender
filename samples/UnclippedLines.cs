@@ -5,7 +5,7 @@ namespace SoftRender.Samples
     {
         public UnclippedLines()
         {
-            name = "Lines Sample";
+            name = "Unclipped Lines Sample";
             clearColor = new Color(0.0f, 0.0f, 0.0f, 1.0f);
             windowResX = 1280;
             windowResY = 960;

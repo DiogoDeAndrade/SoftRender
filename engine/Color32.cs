@@ -3,7 +3,7 @@ using System;
 
 namespace SoftRender
 {
-    struct Color32
+    public struct Color32
     {
         public byte r, g, b, a;
 

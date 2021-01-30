@@ -94,6 +94,8 @@ namespace SoftRender
 
         bool Startup()
         {
+            Random.InitState((int)DateTime.Now.Ticks);
+
             if (SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING) != 0)
             {
                 Debug.Log("Can't initialize SDL2");

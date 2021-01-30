@@ -1,7 +1,7 @@
 ﻿
 namespace SoftRender
 {
-    struct Color
+    public struct Color
     {
         public float r, g, b, a;
 

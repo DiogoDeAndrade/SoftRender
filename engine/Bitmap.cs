@@ -93,7 +93,17 @@ namespace SoftRender
                     pEnd = p1 + t * delta;
                 }
 
-                DrawLine_Unclipped(pStart, pEnd, color);
+                // Recheck if points are inside
+                if ((pStart.x < 0) || (pStart.x >= width) || (pStart.y < 0) || (pStart.y >= height) ||
+                    (pEnd.x < 0) || (pEnd.x >= width) || (pEnd.y < 0) || (pEnd.y >= height))
+                {
+                    // Clipped line is completely outside
+                    return;
+                }
+                else
+                { 
+                    DrawLine_Unclipped(pStart, pEnd, color);
+                }
             }
         }
 

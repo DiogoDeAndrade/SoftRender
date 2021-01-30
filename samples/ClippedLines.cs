@@ -5,7 +5,7 @@ namespace SoftRender.Samples
     {
         public ClippedLines()
         {
-            name = "Lines Sample";
+            name = "Clipped Lines Sample";
             clearColor = new Color(0.0f, 0.0f, 0.0f, 1.0f);
             windowResX = 1280;
             windowResY = 960;
@@ -34,6 +34,8 @@ namespace SoftRender.Samples
             screen.DrawLine(new Vector2(-100, 120), new Vector2(750, 300), new Color(0.5f, 0.5f, 0.5f, 1.0f));
             screen.DrawLine(new Vector2(300, -45), new Vector2(390, 540), new Color(0.5f, 0.5f, 0.5f, 1.0f));
             screen.DrawLine(new Vector2(500, -45), new Vector2(700, 100), new Color(0.5f, 0.5f, 0.5f, 1.0f));
+
+            screen.DrawLine(new Vector2(-100, 100), new Vector2(10, -50), new Color(1.0f, 0.0f, 0.0f, 1.0f));
         }
     }
 }
