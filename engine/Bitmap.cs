@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoftRender
 {
-    class Bitmap
+    public class Bitmap
     {
         public Color32[]    data;
         public int          width, height;

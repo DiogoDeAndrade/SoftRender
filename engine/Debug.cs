@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoftRender
 {
-    static class Debug
+    public static class Debug
     {
         static public void Log(string str)
         {

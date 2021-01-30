@@ -3,7 +3,7 @@ using SDL2;
 
 namespace SoftRender
 {
-    class Application
+    public class Application
     {
         IntPtr  window;
         IntPtr  windowSurface;

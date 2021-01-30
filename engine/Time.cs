@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoftRender
 {
-    static class Time
+    public static class Time
     {
         public static float deltaTime
         {
