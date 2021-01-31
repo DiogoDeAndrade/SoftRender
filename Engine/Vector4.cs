@@ -1,7 +1,7 @@
 
 namespace SoftRender.Engine
 {
-    // Basic implementation of a 3D vector
+    // Basic implementation of a 4D vector
     public struct Vector4
     {
         public float x;

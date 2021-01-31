@@ -5,7 +5,7 @@ namespace SoftRender.Engine
     {
         public float r, g, b, a;
 
-        public Color(float r, float g, float b, float a)
+        public Color(float r, float g, float b, float a = 1.0f)
         {
             this.r = r;
             this.g = g;
@@ -13,7 +13,7 @@ namespace SoftRender.Engine
             this.a = a;
         }
 
-        public void Set(float r, float g, float b, float a)
+        public void Set(float r, float g, float b, float a = 1.0f)
         {
             this.r = r;
             this.g = g;
@@ -46,5 +46,18 @@ namespace SoftRender.Engine
             return $"({r:F3},{g:F3},{b:F3},{a:F3})";
         }
 
+        public static Color Lerp(Color c1, Color c2, float t)
+        {
+            return c1 + (c2 - c1) * t;
+        }
+
+        public static Color black = new Color(0, 0, 0, 1);
+        public static Color white = new Color(1, 1, 1, 1);
+        public static Color grey = new Color(0.5f, 0.5f, 0.5f, 1);
+        public static Color red = new Color(1, 0, 0, 1);
+        public static Color green = new Color(0, 1, 0, 1);
+        public static Color blue = new Color(0, 0, 1, 1);
+        public static Color cyan = new Color(0, 1, 1, 1);
+        public static Color magenta = new Color(1, 0, 1, 1);
     }
 }

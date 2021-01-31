@@ -26,7 +26,10 @@ apt install libsdl2-dev
 
 Engine code developed by [Diogo de Andrade][DAndrade] and [Nuno Fachada][NFachada]; it is made available under the [Mozilla Public License 2.0][MPLv2].
 
-[SDL2#][SDL2#] by [Ethan Lee][ELee]
+Code uses:
+
+* [SDL2#][SDL2#] by [Ethan Lee][ELee]
+* [ImageSharp][ImageSharp] by SixLabors, available under the [Apache License 2.0][Ap2]
 
 All the text and documentation (i.e., non-code files) are made available under
 the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
@@ -35,7 +38,9 @@ https://github.com/flibitijibibo/SDL2-CS
 
 [MPLv2]:https://opensource.org/licenses/MPL-2.0
 [CC BY-NC-SA 4.0]:https://creativecommons.org/licenses/by-nc-sa/4.0/
+[Ap2]:https://opensource.org/licenses/Apache-2.0
 [SDL2#]:https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE
 [ELee]:https://github.com/flibitijibibo
+[ImageSharp]:https://github.com/SixLabors/ImageSharp
 [DAndrade]:https://github.com/DiogoDeAndrade
 [NFachada]:https://github.com/fakenmc

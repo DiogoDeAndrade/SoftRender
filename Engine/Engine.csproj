@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.53" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
   </ItemGroup>
 
   <PropertyGroup>

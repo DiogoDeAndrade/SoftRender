@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SixLabors.ImageSharp;
+using System;
+using System.IO;
 
 namespace SoftRender.Engine
 {
@@ -16,6 +14,14 @@ namespace SoftRender.Engine
             this.width = width;
             this.height = height;
             data = new Color32[width * height];
+        }
+        public Bitmap(string filename)
+        {
+            this.width = 0;
+            this.height = 0;
+            data = null;
+
+            Load(filename);
         }
 
         public void Clear(Color color)
@@ -32,7 +38,6 @@ namespace SoftRender.Engine
         public void DrawLine(Vector2 p1, Vector2 p2, Color color)
         {
             DrawLine(p1, p2, (Color32)color);
-
         }
 
         public void DrawLine(Vector2 p1, Vector2 p2, Color32 color)
@@ -306,6 +311,126 @@ namespace SoftRender.Engine
                 minX += incMinX;
                 maxX += incMaxX;
             }
+        }
+
+        bool Load(string filename)
+        {
+            try
+            {
+                using (Stream stream = File.OpenRead(filename))
+                {
+                    var image = Image.Load<SixLabors.ImageSharp.PixelFormats.Bgra32>(stream);
+
+                    width = image.Width;
+                    height = image.Height;
+
+                    data = new Color32[width * height];
+                    for (int y = 0; y < height; y++)
+                    {
+                        var rowData = image.Frames.RootFrame.GetPixelRowSpan(y);
+                        var targetIndex = y * width;
+                        for (int x = 0; x < width; x++)
+                        {
+                            data[targetIndex].Set(rowData[x].R, rowData[x].G, rowData[x].B, rowData[x].A);
+                            targetIndex++;
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.Log("Failed to load " + filename + ": " + exception.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        public void BlitWithAlphablend(int x, int y, Bitmap src)
+        {
+            int srcWidth = src.width;
+            int srcHeight = src.height;
+
+            // Check if completely out of the screen
+            if (((x + srcWidth) < 0) ||
+                ((y + srcHeight) < 0) ||
+                (x >= width) ||
+                (y >= height)) return;
+
+            int startX = x;
+            int startY = y;
+            int endY = y + srcHeight;
+
+            for (int yy = startY; yy < endY; yy++)
+            {
+                if (yy < 0) continue;
+                else if (yy >= height) break;
+
+                int destIndex = x + yy * width;
+                int srcIndex = (yy - startY) * srcWidth;
+                int endX = startX + srcWidth;
+
+                for (int xx = startX; xx < endX; xx++)
+                {
+                    if (xx >= 0)
+                    {
+                        if (xx >= width) break;
+
+                        data[destIndex] = Color32.Lerp(data[destIndex], src.data[srcIndex], src.data[srcIndex].a);
+                    }
+                    destIndex++;
+                    srcIndex++;
+                }
+            }
+        }
+
+        public void BlitWithAlphablend(int x, int y, Bitmap src, Rect srcRect)
+        {
+            int srcWidth = (int)srcRect.width;
+            int srcHeight = (int)srcRect.height;
+
+            // Check if completely out of the screen
+            if (((x + srcWidth) < 0) ||
+                ((y + srcHeight) < 0) ||
+                (x >= width) ||
+                (y >= height)) return;
+
+            int startX = x;
+            int startY = y;
+            int endY = y + srcHeight;
+
+            for (int yy = startY; yy < endY; yy++)
+            {
+                if (yy < 0) continue;
+                else if (yy >= height) break;
+
+                int destIndex = x + yy * width;
+                int srcIndex = (yy - startY + (int)srcRect.y1) * src.width + (int)srcRect.x1;
+                int endX = startX + srcWidth;
+
+                for (int xx = startX; xx < endX; xx++)
+                {
+                    if (xx >= 0)
+                    {
+                        if (xx >= width) break;
+
+                        data[destIndex] = Color32.Lerp(data[destIndex], src.data[srcIndex], src.data[srcIndex].a);
+                    }
+                    destIndex++;
+                    srcIndex++;
+                }
+            }
+        }
+
+        public Rect GetFrameRect(int tx, int ty, int frameNumber)
+        {
+            var sx = width / tx;
+            var sy = height / ty;
+            var r = new Rect(sx * (frameNumber % tx), sy * (frameNumber / tx), 0, 0);
+            r.x2 = r.x1 + sx;
+            r.y2 = r.y1 + sy;
+
+            return r;
         }
     }
 }
