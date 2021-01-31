@@ -8,29 +8,34 @@ namespace SoftRender.Engine
         IntPtr  window;
         IntPtr  windowSurface;
         IntPtr  renderer;
-        IntPtr  primarySurface;
+        Bitmap  primarySurface;
         long    currentTimestamp;
 
         protected Bitmap  screen;
 
-        protected Color   clearColor;
-        protected int     resX, resY;
-        protected int     windowResX, windowResY;
-        protected string  name;
-        protected bool    exit;
+        protected Color     clearColor;
+        protected int       windowResX, windowResY;
+        public    float     resScale;
+        protected string    name;
+        protected bool      exit;
+        protected bool      writeFPS;
+        protected Font      defaultFont;
 
         public static float deltaTime;
         public static float currentTime;
+
+        public int resX { get { return (int)(windowResX * resScale); } }
+        public int resY { get { return (int)(windowResY * resScale); } }
 
         protected Application()
         {
             name = "Application";
             window = IntPtr.Zero;
             renderer = IntPtr.Zero;
-            primarySurface = IntPtr.Zero;
-            resX = windowResX = 640;
-            resY = windowResY = 480;
+            resScale = 1.0f;
             clearColor = new Color(1.0f, 0.0f, 1.0f, 1.0f);
+            writeFPS = false;
+            defaultFont = new Font("font.png");
         }
 
         public bool Run()
@@ -52,7 +57,6 @@ namespace SoftRender.Engine
             exit = false;
             while (!exit)
             {
-
                 SDL.SDL_Event evt;
                 while (SDL.SDL_PollEvent(out evt) != 0)
                 {
@@ -83,14 +87,29 @@ namespace SoftRender.Engine
 
                 Loop();
 
-                CopyToSurface(screen, primarySurface);
+                if ((writeFPS) && (defaultFont != null))
+                {
+                    float  fps = 1.0f / deltaTime;
+                    string fpsText = string.Format("{0,7:###.0} FPS", fps);
+                    screen.Write(0, 0, fpsText, defaultFont, Color32.white, Color32.black);
+                }
 
-                SDL.SDL_BlitScaled(primarySurface, IntPtr.Zero, windowSurface, IntPtr.Zero);
+                if (resScale == 1.0f)
+                {
+                    CopyToSurface(screen, windowSurface);
+                }
+                else
+                {
+                    // Scale up the screen to the primary surface
+                    primarySurface.BlitScale(screen, 0, 0, resScale);
+
+                    CopyToSurface(primarySurface, windowSurface);
+                }
 
                 SDL.SDL_UpdateWindowSurface(window);
 
                 long t = DateTime.Now.Ticks;
-                deltaTime = (t - currentTimestamp) *10e-7f;
+                deltaTime = (t - currentTimestamp) * 10e-7f;
 #if DEBUG
                 if (deltaTime > 0.1) deltaTime = 0.1f;
 #endif
@@ -125,7 +144,10 @@ namespace SoftRender.Engine
             windowSurface = SDL.SDL_GetWindowSurface(window);
             renderer = SDL.SDL_CreateSoftwareRenderer(windowSurface);
 
-            primarySurface = SDL.SDL_CreateRGBSurface(0, resX, resY, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+            if (resScale != 1.0f)
+            {
+                primarySurface = new Bitmap(windowResX, windowResY);
+            }
             screen = new Bitmap(resX, resY);
 
             return true;
@@ -133,7 +155,6 @@ namespace SoftRender.Engine
 
         void Shutdown()
         {
-            SDL.SDL_FreeSurface(primarySurface);
             SDL.SDL_Quit();
         }
 
@@ -161,6 +182,39 @@ namespace SoftRender.Engine
 
                         srcLine += src.width * 4;
                         destData += surfaceData.pitch;
+                    }
+                }
+            }
+        }
+        unsafe void CopyToSurface(Bitmap src, IntPtr dest, float scale)
+        {
+            var surfaceData = (SDL.SDL_Surface)System.Runtime.InteropServices.Marshal.PtrToStructure(dest, typeof(SDL.SDL_Surface));
+
+            int srcPerDestX = (int)(1.0f / scale);
+            int srcPerDestY = (int)(1.0f / scale);
+
+            var destData = surfaceData.pixels;
+            fixed (byte* srcData = &src.data[0].r)
+            {
+                byte* srcLine = srcData;
+                
+                for (int y = 0; y < src.height; y++)
+                {
+                    for (int yy = 0; yy < srcPerDestY; yy++)
+                    {
+                        srcLine = srcData + y * src.width * 4;
+                        destData = surfaceData.pixels + ((y * srcPerDestY) + yy) * surfaceData.pitch;
+
+                        for (int x = 0; x < src.width; x++)
+                        {
+                            for (int xx = 0; xx < srcPerDestX; xx++)
+                            {
+                                Buffer.MemoryCopy(srcLine, destData.ToPointer(), 4, 4);
+                                destData += 4;
+                            }
+
+                            srcLine += 4;
+                        }
                     }
                 }
             }

@@ -10,6 +10,8 @@ namespace SoftRender.Samples.RandomTriangles
             clearColor = new Color(0.0f, 0.0f, 0.0f, 1.0f);
             windowResX = 1280;
             windowResY = 960;
+            resScale = 1;
+            writeFPS = true;
         }
 
         protected override void Loop()

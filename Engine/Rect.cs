@@ -27,7 +27,7 @@ namespace SoftRender.Engine
         }
         public float height
         {
-            get { return Mathf.Abs(x2 - x1); }
+            get { return Mathf.Abs(y2 - y1); }
         }
     }
 }

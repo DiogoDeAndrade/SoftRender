@@ -35,6 +35,24 @@ namespace SoftRender.Engine
             span.Fill(color);
         }
 
+        public void DrawRect(Rect rect, Color32 color)
+        {
+            int x1 = Math.Max((int)rect.x1, 0); x1 = Math.Min(x1, width - 1);
+            int y1 = Math.Max((int)rect.y1, 0); y1 = Math.Min(y1, height - 1);
+            int x2 = Math.Max((int)rect.x2, 0); x2 = Math.Min(x2, width - 1);
+            int y2 = Math.Max((int)rect.y2, 0); y2 = Math.Min(y2, height - 1);
+
+            for (int y = y1; y < y2; y++)
+            {
+                int idx = x1 + y * width;
+                for (int x = x1; x < x2; x++)
+                {
+                    data[idx] = color;
+                    idx++;
+                }
+            }
+        }
+
         public void DrawLine(Vector2 p1, Vector2 p2, Color color)
         {
             DrawLine(p1, p2, (Color32)color);
@@ -422,6 +440,72 @@ namespace SoftRender.Engine
             }
         }
 
+        public void BlitMask(int x, int y, Bitmap src, Rect srcRect, Color32 c)
+        {
+            int srcWidth = (int)srcRect.width;
+            int srcHeight = (int)srcRect.height;
+
+            // Check if completely out of the screen
+            if (((x + srcWidth) < 0) ||
+                ((y + srcHeight) < 0) ||
+                (x >= width) ||
+                (y >= height)) return;
+
+            int startX = x;
+            int startY = y;
+            int endY = y + srcHeight;
+
+            for (int yy = startY; yy < endY; yy++)
+            {
+                if (yy < 0) continue;
+                else if (yy >= height) break;
+
+                int destIndex = x + yy * width;
+                int srcIndex = (yy - startY + (int)srcRect.y1) * src.width + (int)srcRect.x1;
+                int endX = startX + srcWidth;
+
+                for (int xx = startX; xx < endX; xx++)
+                {
+                    if (xx >= 0)
+                    {
+                        if (xx >= width) break;
+
+                        data[destIndex] = Color32.Lerp(data[destIndex], c, src.data[srcIndex].a);
+                    }
+                    destIndex++;
+                    srcIndex++;
+                }
+            }
+        }
+
+        public void BlitScale(Bitmap src, int x, int y, float scale)
+        {
+            int p = (int)(1 / scale);
+
+            float srcX = 0.0f;
+            float srcY = 0.0f;
+            float inc = scale;
+
+            for (int py = 0; py < src.height * p; py++)
+            {
+                int destIdx = x + py * width;
+                int srcLineIdx = Mathf.FloorToInt(srcY) * src.width;
+                
+                srcX = 0.0f;
+
+                for (int px = 0; px < src.width * p; px++)
+                {
+                    int srcIdx = Mathf.FloorToInt(srcX) + srcLineIdx;
+                    data[destIdx] = src.data[srcIdx];
+
+                    destIdx++;
+                    srcX += inc;
+                }
+
+                srcY += inc;
+            }
+        }
+
         public Rect GetFrameRect(int tx, int ty, int frameNumber)
         {
             var sx = width / tx;
@@ -431,6 +515,29 @@ namespace SoftRender.Engine
             r.y2 = r.y1 + sy;
 
             return r;
+        }
+
+        public void Write(int x, int y, string txt, Font font, Color textColor)
+        {
+            Write(x, y, txt, font, (Color32)textColor);
+        }
+        public void Write(int x, int y, string txt, Font font, Color textColor, Color backgroundColor)
+        {
+            Write(x, y, txt, font, (Color32)textColor, (Color32)backgroundColor);
+        }
+
+        public void Write(int x, int y, string txt, Font font, Color32 textColor)
+        {
+            font.WriteTo(this, x, y, txt, textColor);
+        }
+
+        public void Write(int x, int y, string txt, Font font, Color32 textColor, Color32 backgroundColor)
+        {
+            Rect rect = font.GetTextRect(x, y, txt);
+
+            DrawRect(rect, backgroundColor);
+            
+            font.WriteTo(this, x, y, txt, textColor);
         }
     }
 }

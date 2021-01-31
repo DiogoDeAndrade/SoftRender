@@ -50,5 +50,6 @@ namespace SoftRender.Engine
         public static Color32 blue = new Color32(0, 0, 255, 255);
         public static Color32 cyan = new Color32(0, 255, 255, 255);
         public static Color32 magenta = new Color32(255, 0, 255, 255);
+        public static Color32 yellow = new Color32(255, 255, 0, 255);
     }
 }

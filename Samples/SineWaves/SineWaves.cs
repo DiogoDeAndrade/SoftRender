@@ -17,8 +17,7 @@ namespace SoftRender.Samples.SineWaves
         public SineWaves()
         {
             name = "Sine Waves Sample";
-            resX = 160;
-            resY = 120;
+            resScale = 0.125f;
 
             sines = new SineWaveStruct[]
             {

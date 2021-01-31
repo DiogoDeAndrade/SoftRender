@@ -17,8 +17,7 @@ namespace SoftRender.Samples.Images
             clearColor = new Color(0.0f, 0.0f, 0.1f);
             windowResX = 1280;
             windowResY = 960;
-            resX = 160;
-            resY = 120;
+            resScale = 0.125f;
         }
 
         protected override bool Initialize()

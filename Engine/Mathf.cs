@@ -17,5 +17,7 @@ namespace SoftRender.Engine
         public static float Min(float a, float b) { return MathF.Min(a, b); }
         public static float Max(float a, float b) { return MathF.Max(a, b); }
         public static float Sqrt(float v) { return MathF.Sqrt(v); }
+        public static float Floor(float v) { return MathF.Floor(v); }
+        public static int FloorToInt(float v) { return (int)MathF.Floor(v); }
     }
 }

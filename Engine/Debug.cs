@@ -11,6 +11,7 @@ namespace SoftRender.Engine
         static public void Log(string str)
         {
             System.Diagnostics.Debug.WriteLine(str);
+            Console.WriteLine(str);
         }
     }
 }
