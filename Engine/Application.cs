@@ -36,7 +36,11 @@ namespace SoftRender.Engine
             resScale = 1.0f;
             clearColor = new Color(1.0f, 0.0f, 1.0f, 1.0f);
             writeFPS = false;
-            defaultFont = new Font("font.png");
+            // Check if font exists
+            if (System.IO.File.Exists("font.png"))
+            {
+                defaultFont = new Font("font.png");
+            }
             windowResX = 640;
             windowResY = 480;
         }
@@ -99,25 +103,12 @@ namespace SoftRender.Engine
 
                 if (resScale == 1.0f)
                 {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
-                        primarySurface.SwapRB(screen);
-                        CopyToSurface(primarySurface, windowSurface);
-                    }
-                    else
-                    {
-                        CopyToSurface(screen, windowSurface);
-                    }
+                    CopyToSurface(screen, windowSurface);
                 }
                 else
                 {
                     // Scale up the screen to the primary surface
                     primarySurface.BlitScale(screen, 0, 0, resScale);
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
-                        primarySurface.SwapRB();
-                    }
-
                     CopyToSurface(primarySurface, windowSurface);
                 }
 
@@ -176,7 +167,7 @@ namespace SoftRender.Engine
 
             if (surfaceData.pitch == surfaceData.w * 4)
             {
-                fixed (byte* srcData = &src.data[0].r)
+                fixed (Color32* srcData = &src.data[0])
                 {
                     Buffer.MemoryCopy(srcData, surfaceData.pixels.ToPointer(), src.width * src.height * 4, src.width * src.height * 4);
                 }
@@ -184,15 +175,15 @@ namespace SoftRender.Engine
             else
             {
                 var destData = surfaceData.pixels;
-                fixed (byte* srcData = &src.data[0].r)
+                fixed (Color32* srcData = &src.data[0])
                 {
-                    byte* srcLine = srcData;
+                    Color32* srcLine = srcData;
 
                     for (int y = 0; y < src.height; y++)
                     {
                         Buffer.MemoryCopy(srcLine, destData.ToPointer(), src.width * src.height * 4, src.width * 4);
 
-                        srcLine += src.width * 4;
+                        srcLine += src.width;
                         destData += surfaceData.pitch;
                     }
                 }
