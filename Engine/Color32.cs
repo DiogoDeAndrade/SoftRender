@@ -1,11 +1,17 @@
 ﻿
 using System;
+using System.Runtime.InteropServices;
 
 namespace SoftRender.Engine
 {
+    // Need to force the layout since this is used to copy data to SDL
+    [StructLayout(LayoutKind.Sequential)]
     public struct Color32
     {
-        public byte r, g, b, a;
+        public byte r;
+        public byte g;
+        public byte b;
+        public byte a;
 
         public Color32(byte r, byte g, byte b, byte a = 255)
         {

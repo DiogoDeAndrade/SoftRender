@@ -506,6 +506,22 @@ namespace SoftRender.Engine
             }
         }
 
+        public void SwapRB()
+        {
+            for (int i = 0; i < width * height; i++)
+            {
+                data[i].Set(data[i].b, data[i].g, data[i].r, data[i].a);
+            }
+        }
+
+        public void SwapRB(Bitmap src)
+        {
+            for (int i = 0; i < width * height; i++)
+            {
+                data[i].Set(src.data[i].b, src.data[i].g, src.data[i].r, src.data[i].a);
+            }
+        }
+
         public Rect GetFrameRect(int tx, int ty, int frameNumber)
         {
             var sx = width / tx;

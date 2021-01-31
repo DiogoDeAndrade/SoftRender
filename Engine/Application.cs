@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using SDL2;
 
 namespace SoftRender.Engine
@@ -98,12 +99,24 @@ namespace SoftRender.Engine
 
                 if (resScale == 1.0f)
                 {
-                    CopyToSurface(screen, windowSurface);
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        primarySurface.SwapRB(screen);
+                        CopyToSurface(primarySurface, windowSurface);
+                    }
+                    else
+                    {
+                        CopyToSurface(screen, windowSurface);
+                    }
                 }
                 else
                 {
                     // Scale up the screen to the primary surface
                     primarySurface.BlitScale(screen, 0, 0, resScale);
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        primarySurface.SwapRB();
+                    }
 
                     CopyToSurface(primarySurface, windowSurface);
                 }
@@ -146,10 +159,7 @@ namespace SoftRender.Engine
             windowSurface = SDL.SDL_GetWindowSurface(window);
             renderer = SDL.SDL_CreateSoftwareRenderer(windowSurface);
 
-            if (resScale != 1.0f)
-            {
-                primarySurface = new Bitmap(windowResX, windowResY);
-            }
+            primarySurface = new Bitmap(windowResX, windowResY);
             screen = new Bitmap(resX, resY);
 
             return true;
@@ -184,39 +194,6 @@ namespace SoftRender.Engine
 
                         srcLine += src.width * 4;
                         destData += surfaceData.pitch;
-                    }
-                }
-            }
-        }
-        unsafe void CopyToSurface(Bitmap src, IntPtr dest, float scale)
-        {
-            var surfaceData = (SDL.SDL_Surface)System.Runtime.InteropServices.Marshal.PtrToStructure(dest, typeof(SDL.SDL_Surface));
-
-            int srcPerDestX = (int)(1.0f / scale);
-            int srcPerDestY = (int)(1.0f / scale);
-
-            var destData = surfaceData.pixels;
-            fixed (byte* srcData = &src.data[0].r)
-            {
-                byte* srcLine = srcData;
-                
-                for (int y = 0; y < src.height; y++)
-                {
-                    for (int yy = 0; yy < srcPerDestY; yy++)
-                    {
-                        srcLine = srcData + y * src.width * 4;
-                        destData = surfaceData.pixels + ((y * srcPerDestY) + yy) * surfaceData.pitch;
-
-                        for (int x = 0; x < src.width; x++)
-                        {
-                            for (int xx = 0; xx < srcPerDestX; xx++)
-                            {
-                                Buffer.MemoryCopy(srcLine, destData.ToPointer(), 4, 4);
-                                destData += 4;
-                            }
-
-                            srcLine += 4;
-                        }
                     }
                 }
             }

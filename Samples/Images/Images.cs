@@ -14,7 +14,7 @@ namespace SoftRender.Samples.Images
         public Images()
         {
             name = "Images Sample";
-            clearColor = new Color(0.0f, 0.0f, 0.1f);
+            clearColor = new Color(0.0f, 0.0f, 0.2f, 1.0f);
             windowResX = 1280;
             windowResY = 960;
             resScale = 0.125f;
