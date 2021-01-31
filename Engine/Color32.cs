@@ -7,7 +7,7 @@ namespace SoftRender.Engine
     {
         public byte r, g, b, a;
 
-        public Color32(byte r, byte g, byte b, byte a)
+        public Color32(byte r, byte g, byte b, byte a = 255)
         {
             this.r = r;
             this.g = g;
@@ -15,7 +15,7 @@ namespace SoftRender.Engine
             this.a = a;
         }
 
-        public void Set(byte r, byte g, byte b, byte a)
+        public void Set(byte r, byte g, byte b, byte a = 255)
         {
             this.r = r;
             this.g = g;
