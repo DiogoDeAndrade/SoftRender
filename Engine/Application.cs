@@ -36,6 +36,8 @@ namespace SoftRender.Engine
             clearColor = new Color(1.0f, 0.0f, 1.0f, 1.0f);
             writeFPS = false;
             defaultFont = new Font("font.png");
+            windowResX = 640;
+            windowResY = 480;
         }
 
         public bool Run()
