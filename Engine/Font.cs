@@ -31,7 +31,7 @@ namespace SoftRender.Engine
 
             foreach (var c in txt)
             {
-                if (c < 32)
+                if ((c < 32) || (c > 127))
                 {
                     if (c == '\n')
                     {

@@ -16,5 +16,10 @@ namespace SoftRender.Engine
         {
             get { return Application.currentTime; }
         }
+
+        public static double tickCount
+        {
+            get { return DateTime.Now.Ticks; }
+        }
     }
 }
