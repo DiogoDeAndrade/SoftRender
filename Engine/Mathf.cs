@@ -19,5 +19,6 @@ namespace SoftRender.Engine
         public static float Sqrt(float v) { return MathF.Sqrt(v); }
         public static float Floor(float v) { return MathF.Floor(v); }
         public static int FloorToInt(float v) { return (int)MathF.Floor(v); }
+        public static float Round(float v) { return MathF.Round(v); }
     }
 }

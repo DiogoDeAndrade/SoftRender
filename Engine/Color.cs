@@ -60,5 +60,6 @@ namespace SoftRender.Engine
         public static Color cyan = new Color(0, 1, 1, 1);
         public static Color magenta = new Color(1, 0, 1, 1);
         public static Color yellow = new Color(1, 1, 0, 1);
+        public static Color unityBlue = new Color(0.34f, 0.42f, 0.56f, 1.0f);
     }
 }
