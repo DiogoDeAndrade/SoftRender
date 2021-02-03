@@ -12,11 +12,23 @@ namespace SoftRender.UnityApp
             public MethodInfo  method;
             public object      obj;
         };
+
         static List<Callable> updateBehaviours = new List<Callable>();
+        static List<Callable> postRenderBehaviours = new List<Callable>();
 
         static public void RunUpdate()
         {
-            foreach (var toUpdate in updateBehaviours)
+            RunMethod(updateBehaviours);
+        }
+
+        static public void RunOnPostUpdate()
+        {
+            RunMethod(postRenderBehaviours);
+        }
+
+        private static void RunMethod(List<Callable> behaviourList)
+        {
+            foreach (var toUpdate in behaviourList)
             {
                 object[] parameters = null;
                 toUpdate.method.Invoke(toUpdate.obj, parameters);
@@ -32,10 +44,16 @@ namespace SoftRender.UnityApp
             base.InitUnityComponent();
 
             var type = GetType();
-            var updateMethod = type.GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            if (updateMethod != null)
+            AddMethodToList(type, "Update", updateBehaviours);
+            AddMethodToList(type, "OnPostRender", postRenderBehaviours);
+        }
+
+        void AddMethodToList(System.Type type, string methodName, List<Callable> behaviourList)
+        {
+            var method = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            if (method != null)
             {
-                updateBehaviours.Add(new Callable(updateMethod, this));
+                behaviourList.Add(new Callable(method, this));
             }
         }
     }

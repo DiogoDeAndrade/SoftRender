@@ -51,12 +51,20 @@ namespace SoftRender.Engine
             return scalingMatrix * rotationMatrix * translationMatrix;
         }
 
+        static public Matrix4x4 PR(Vector3 position, Quaternion rotation)
+        {
+            var translationMatrix = Translate(position);
+            var rotationMatrix = Rotate(rotation);
+
+            return rotationMatrix * translationMatrix;
+        }
+
         static public Matrix4x4 Ortographic(int viewportWidth, int viewportHeight, float nearPlane = 0, float farPlane = 1)
         {
-            return new Matrix4x4(2.0f / viewportWidth, 0, 0, -1.0f / viewportWidth,
-                                 0, 2.0f / viewportHeight, 0, -1.0f / viewportHeight,
+            return new Matrix4x4(2.0f / viewportWidth, 0, 0, 0,
+                                 0, 2.0f / viewportHeight, 0, 0,
                                  0, 0, 1 / (farPlane - nearPlane), 0,
-                                 0, 0, 0, 1); ;
+                                 -1.0f / viewportWidth, -1.0f / viewportHeight, 0, 1); ;
         }
 
 
@@ -114,7 +122,7 @@ namespace SoftRender.Engine
             return ret;
         }
 
-        public static Vector4 operator* (Matrix4x4 a, Vector4 v)
+        public static Vector4 operator *(Matrix4x4 a, Vector4 v)
         {
             Vector4 ret = new Vector4(
                 v.x * a.m[0, 0] + v.y * a.m[1, 0] + v.z * a.m[2, 0] + v.w * a.m[3, 0],
@@ -125,21 +133,35 @@ namespace SoftRender.Engine
             return ret;
         }
 
+        public static Vector4 operator *(Vector4 v, Matrix4x4 a)
+        {
+            Vector4 ret = new Vector4(
+                v.x * a.m[0, 1] + v.y * a.m[0, 1] + v.z * a.m[0, 2] + v.w * a.m[0, 3],
+                v.x * a.m[1, 1] + v.y * a.m[1, 1] + v.z * a.m[1, 2] + v.w * a.m[1, 3],
+                v.x * a.m[2, 2] + v.y * a.m[2, 1] + v.z * a.m[2, 2] + v.w * a.m[2, 3],
+                v.x * a.m[3, 3] + v.y * a.m[3, 1] + v.z * a.m[3, 2] + v.w * a.m[3, 3]);
+
+            return ret;
+        }
+
 
         public Matrix4x4 inverse
         {
             get
             {
-                float[] tmp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                float[] src = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                float[] dst = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-                // Initialize with transpose of source
+                float[] tmp = new float[12]; /* temp array for pairs */
+                float[] src = new float[16]; /* array of transpose source matrix */
+                float[] dst = new float[16];
+                float det; /* determinant */
+                /* transpose matrix */
                 for (int i = 0; i < 4; i++)
+                {
                     for (int j = 0; j < 4; j++)
+                    {
                         src[i * 4 + j] = m[j, i];
-
-                // Calculate pairs for first 8 elements (cofactors) 
+                    }
+                }
+                /* calculate pairs for first 8 elements (cofactors) */
                 tmp[0] = src[10] * src[15];
                 tmp[1] = src[11] * src[14];
                 tmp[2] = src[9] * src[15];
@@ -152,8 +174,7 @@ namespace SoftRender.Engine
                 tmp[9] = src[10] * src[12];
                 tmp[10] = src[8] * src[13];
                 tmp[11] = src[9] * src[12];
-
-                // calculate first 8 elements 
+                /* calculate first 8 elements (cofactors) */
                 dst[0] = tmp[0] * src[5] + tmp[3] * src[6] + tmp[4] * src[7];
                 dst[0] -= tmp[1] * src[5] + tmp[2] * src[6] + tmp[5] * src[7];
                 dst[1] = tmp[1] * src[4] + tmp[6] * src[6] + tmp[9] * src[7];
@@ -170,8 +191,7 @@ namespace SoftRender.Engine
                 dst[6] -= tmp[2] * src[0] + tmp[7] * src[1] + tmp[10] * src[3];
                 dst[7] = tmp[4] * src[0] + tmp[9] * src[1] + tmp[10] * src[2];
                 dst[7] -= tmp[5] * src[0] + tmp[8] * src[1] + tmp[11] * src[2];
-
-                // calculate pairs for second 8 elements (cofactors) 
+                /* calculate pairs for second 8 elements (cofactors) */
                 tmp[0] = src[2] * src[7];
                 tmp[1] = src[3] * src[6];
                 tmp[2] = src[1] * src[7];
@@ -184,8 +204,7 @@ namespace SoftRender.Engine
                 tmp[9] = src[2] * src[4];
                 tmp[10] = src[0] * src[5];
                 tmp[11] = src[1] * src[4];
-
-                // calculate second 8 elements (cofactors) 
+                /* calculate second 8 elements (cofactors) */
                 dst[8] = tmp[0] * src[13] + tmp[3] * src[14] + tmp[4] * src[15];
                 dst[8] -= tmp[1] * src[13] + tmp[2] * src[14] + tmp[5] * src[15];
                 dst[9] = tmp[1] * src[12] + tmp[6] * src[14] + tmp[9] * src[15];
@@ -202,23 +221,107 @@ namespace SoftRender.Engine
                 dst[14] -= tmp[10] * src[11] + tmp[2] * src[8] + tmp[7] * src[9];
                 dst[15] = tmp[10] * src[10] + tmp[4] * src[8] + tmp[9] * src[9];
                 dst[15] -= tmp[8] * src[9] + tmp[11] * src[10] + tmp[5] * src[8];
-
-                // calculate determinant 
-                float det = src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3];
-
-                // calculate inverse
+                /* calculate determinant */
+                det = src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3];
+                /* calculate matrix inverse */
                 det = 1 / det;
-                for (int i = 0; i < 16; i++)
-                    dst[i] *= det;
+                for (int j = 0; j < 16; j++) dst[j] *= det;
 
-                // Load to target
-                Matrix4x4 ret = new Matrix4x4(0);
+                return new Matrix4x4(dst[0], dst[1], dst[2], dst[3],
+                                     dst[4], dst[5], dst[6], dst[7],
+                                     dst[8], dst[9], dst[10], dst[11],
+                                     dst[12], dst[13], dst[14], dst[15]);
 
-                for (int i = 0; i < 4; i++)
-                    for (int j = 0; j < 4; j++)
-                        ret.m[i, j] = src[i * 4 + j];
+                /*                float[] tmp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                                float[] src = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                                float[] dst = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-                return ret;
+                                // Initialize with transpose of source
+                                for (int i = 0; i < 4; i++)
+                                    for (int j = 0; j < 4; j++)
+                                        src[i * 4 + j] = m[j, i];
+
+                                // Calculate pairs for first 8 elements (cofactors) 
+                                tmp[0] = src[10] * src[15];
+                                tmp[1] = src[11] * src[14];
+                                tmp[2] = src[9] * src[15];
+                                tmp[3] = src[11] * src[13];
+                                tmp[4] = src[9] * src[14];
+                                tmp[5] = src[10] * src[13];
+                                tmp[6] = src[8] * src[15];
+                                tmp[7] = src[11] * src[12];
+                                tmp[8] = src[8] * src[14];
+                                tmp[9] = src[10] * src[12];
+                                tmp[10] = src[8] * src[13];
+                                tmp[11] = src[9] * src[12];
+
+                                // calculate first 8 elements 
+                                dst[0] = tmp[0] * src[5] + tmp[3] * src[6] + tmp[4] * src[7];
+                                dst[0] -= tmp[1] * src[5] + tmp[2] * src[6] + tmp[5] * src[7];
+                                dst[1] = tmp[1] * src[4] + tmp[6] * src[6] + tmp[9] * src[7];
+                                dst[1] -= tmp[0] * src[4] + tmp[7] * src[6] + tmp[8] * src[7];
+                                dst[2] = tmp[2] * src[4] + tmp[7] * src[5] + tmp[10] * src[7];
+                                dst[2] -= tmp[3] * src[4] + tmp[6] * src[5] + tmp[11] * src[7];
+                                dst[3] = tmp[5] * src[4] + tmp[8] * src[5] + tmp[11] * src[6];
+                                dst[3] -= tmp[4] * src[4] + tmp[9] * src[5] + tmp[10] * src[6];
+                                dst[4] = tmp[1] * src[1] + tmp[2] * src[2] + tmp[5] * src[3];
+                                dst[4] -= tmp[0] * src[1] + tmp[3] * src[2] + tmp[4] * src[3];
+                                dst[5] = tmp[0] * src[0] + tmp[7] * src[2] + tmp[8] * src[3];
+                                dst[5] -= tmp[1] * src[0] + tmp[6] * src[2] + tmp[9] * src[3];
+                                dst[6] = tmp[3] * src[0] + tmp[6] * src[1] + tmp[11] * src[3];
+                                dst[6] -= tmp[2] * src[0] + tmp[7] * src[1] + tmp[10] * src[3];
+                                dst[7] = tmp[4] * src[0] + tmp[9] * src[1] + tmp[10] * src[2];
+                                dst[7] -= tmp[5] * src[0] + tmp[8] * src[1] + tmp[11] * src[2];
+
+                                // calculate pairs for second 8 elements (cofactors) 
+                                tmp[0] = src[2] * src[7];
+                                tmp[1] = src[3] * src[6];
+                                tmp[2] = src[1] * src[7];
+                                tmp[3] = src[3] * src[5];
+                                tmp[4] = src[1] * src[6];
+                                tmp[5] = src[2] * src[5];
+                                tmp[6] = src[0] * src[7];
+                                tmp[7] = src[3] * src[4];
+                                tmp[8] = src[0] * src[6];
+                                tmp[9] = src[2] * src[4];
+                                tmp[10] = src[0] * src[5];
+                                tmp[11] = src[1] * src[4];
+
+                                // calculate second 8 elements (cofactors) 
+                                dst[8] = tmp[0] * src[13] + tmp[3] * src[14] + tmp[4] * src[15];
+                                dst[8] -= tmp[1] * src[13] + tmp[2] * src[14] + tmp[5] * src[15];
+                                dst[9] = tmp[1] * src[12] + tmp[6] * src[14] + tmp[9] * src[15];
+                                dst[9] -= tmp[0] * src[12] + tmp[7] * src[14] + tmp[8] * src[15];
+                                dst[10] = tmp[2] * src[12] + tmp[7] * src[13] + tmp[10] * src[15];
+                                dst[10] -= tmp[3] * src[12] + tmp[6] * src[13] + tmp[11] * src[15];
+                                dst[11] = tmp[5] * src[12] + tmp[8] * src[13] + tmp[11] * src[14];
+                                dst[11] -= tmp[4] * src[12] + tmp[9] * src[13] + tmp[10] * src[14];
+                                dst[12] = tmp[2] * src[10] + tmp[5] * src[11] + tmp[1] * src[9];
+                                dst[12] -= tmp[4] * src[11] + tmp[0] * src[9] + tmp[3] * src[10];
+                                dst[13] = tmp[8] * src[11] + tmp[0] * src[8] + tmp[7] * src[10];
+                                dst[13] -= tmp[6] * src[10] + tmp[9] * src[11] + tmp[1] * src[8];
+                                dst[14] = tmp[6] * src[9] + tmp[11] * src[11] + tmp[3] * src[8];
+                                dst[14] -= tmp[10] * src[11] + tmp[2] * src[8] + tmp[7] * src[9];
+                                dst[15] = tmp[10] * src[10] + tmp[4] * src[8] + tmp[9] * src[9];
+                                dst[15] -= tmp[8] * src[9] + tmp[11] * src[10] + tmp[5] * src[8];
+
+                                // calculate determinant 
+                                float det = src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3];
+
+                                // calculate inverse
+                                det = 1 / det;
+                                for (int i = 0; i < 16; i++)
+                                    dst[i] *= det;
+
+                                // Load to target
+                                Matrix4x4 ret = new Matrix4x4(0);
+
+                                for (int i = 0; i < 4; i++)
+                                    for (int j = 0; j < 4; j++)
+                                        ret.m[i, j] = src[i * 4 + j];
+
+                                return ret;*/
+
             }
         }
     }

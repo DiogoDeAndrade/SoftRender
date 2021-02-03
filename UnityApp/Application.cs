@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SoftRender.Engine;
 using SoftRender.UnityApp.SceneManagement;
 
@@ -61,6 +62,14 @@ namespace SoftRender.UnityApp
                 }
                 camera.Render(toRender);
             }
+
+            // Run post render method
+            MonoBehaviour.RunOnPostUpdate();
+        }
+
+        public static void Write(int x, int y, string txt, Color textColor, Color backgroundColor)
+        {
+            currentScreen.Write(x, y, txt, current.defaultFont, textColor, backgroundColor);
         }
     }
 }

@@ -9,4 +9,10 @@
     <ProjectReference Include="..\..\UnityApp\UnityApp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="font.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -29,7 +29,7 @@ namespace SoftRender.UnityApp
                 transformedVertices[i] = objectClipMatrix * new Vector4(vertices[i], 1);
                 transformedVertices[i] = transformedVertices[i] / transformedVertices[i].w;
                 transformedVertices[i].x = transformedVertices[i].x * w + w;
-                transformedVertices[i].y = transformedVertices[i].y * h + h;
+                transformedVertices[i].y = -transformedVertices[i].y * h + h;
             }
 
             for (int i = 0; i < triangles.Length; i+=3)
