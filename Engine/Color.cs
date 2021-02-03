@@ -36,7 +36,7 @@ namespace SoftRender.Engine
             get { return Mathf.Sqrt(r * r + g * g + b * b + a * a); }
         }
 
-        public Color normalibed
+        public Color normalized
         {
             get { return this * (1.0f / magnitude); }
         }

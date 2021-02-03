@@ -74,7 +74,7 @@ namespace SoftRender.UnityApp
         {
             var proj = GetProjectionMatrix();
             var pos = (pixelPerfect) ? (Vector3.Round(gameObject.transform.position)) : (gameObject.transform.position);
-            var prs = Matrix4x4.PR(pos, gameObject.transform.rotation);
+            var prs = Matrix4x4.PR(pos, gameObject.transform.rotation).inverse;
 
             return prs * proj;
         }
