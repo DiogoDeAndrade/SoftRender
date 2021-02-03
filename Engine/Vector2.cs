@@ -14,11 +14,14 @@ namespace SoftRender.Engine
         }
 
         public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.x + b.x, a.y + b.y);
+        public static Vector2 operator +(Vector2 a, float b) => new Vector2(a.x + b, a.y + b);
         public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y);
         public static Vector2 operator -(Vector2 a) => new Vector2(-a.x, -a.y);
         public static Vector2 operator *(Vector2 v, float s) => new Vector2(v.x * s, v.y * s);
         public static Vector2 operator *(float s, Vector2 v) => new Vector2(v.x * s, v.y * s);
         public static Vector2 operator /(Vector2 v, float s) => new Vector2(v.x / s, v.y / s);
+
+        static public float Dot(Vector2 a, Vector2 b) => a.x * b.x + a.y * b.y;
 
         public float magnitude
         {

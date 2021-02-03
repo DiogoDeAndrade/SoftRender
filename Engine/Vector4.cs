@@ -30,6 +30,8 @@ namespace SoftRender.Engine
         public static Vector4 operator *(float s, Vector4 v) => new Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
         public static Vector4 operator /(Vector4 v, float s) => new Vector4(v.x / s, v.y / s, v.z / s, v.w / s);
 
+        static public float Dot(Vector4 a, Vector4 b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+
         public float magnitude
         {
             get { return Mathf.Sqrt(x * x + y * y + z * z + w * w); }

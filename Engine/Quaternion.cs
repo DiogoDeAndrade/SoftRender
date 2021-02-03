@@ -81,6 +81,8 @@
             return new Quaternion(x, y, z, w);
         }
 
+        public static Quaternion Euler(Vector3 a) => Euler(a.x, a.y, a.z);
+
         public static Quaternion Euler(float x, float y, float z)
         {
             Quaternion rx = Quaternion.AngleAxis(x, Vector3.right);

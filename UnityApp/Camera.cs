@@ -15,6 +15,7 @@ namespace SoftRender.UnityApp
         public float            orthographicSize = 480;
         public float            nearClipPlane = 0.3f;
         public float            farClipPlane = 1000.0f;
+        public float            fieldOfView = 60.0f;
         public bool             pixelPerfect = false;
 
         int viewportWidth { get { return Application.current.resX; } }
@@ -66,14 +67,14 @@ namespace SoftRender.UnityApp
             }
             else
             {
-                throw new System.NotImplementedException();
+                return Matrix4x4.Perspective(fieldOfView, viewportWidth, viewportHeight, nearClipPlane, farClipPlane);
             }
         }
 
         Matrix4x4 GetClipMatrix()
         {
             var proj = GetProjectionMatrix();
-            var pos = (pixelPerfect) ? (Vector3.Round(gameObject.transform.position)) : (gameObject.transform.position);
+            var pos = (pixelPerfect && orthographic) ? (Vector3.Round(gameObject.transform.position)) : (gameObject.transform.position);
             var prs = Matrix4x4.PR(pos, gameObject.transform.rotation).inverse;
 
             return prs * proj;

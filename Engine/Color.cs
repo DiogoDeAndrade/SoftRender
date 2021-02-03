@@ -25,6 +25,14 @@ namespace SoftRender.Engine
         {
             return new Color(v.r / 255.0f, v.g / 255.0f, v.b / 255.0f, v.a / 255.0f);
         }
+        public static explicit operator Color(Vector3 v)
+        {
+            return new Color(v.x, v.y, v.z, 1.0f);
+        }
+        public static explicit operator Color(Vector4 v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }
         public static Color operator +(Color a, Color b) => new Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
         public static Color operator -(Color a, Color b) => new Color(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
         public static Color operator *(Color v, float s) => new Color(v.r * s, v.g * s, v.b * s, v.a * s);

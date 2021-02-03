@@ -1,4 +1,6 @@
 
+using System;
+
 namespace SoftRender.Engine
 {
     // Basic implementation of a 4x4 matrix
@@ -64,7 +66,17 @@ namespace SoftRender.Engine
             return new Matrix4x4(2.0f / viewportWidth, 0, 0, 0,
                                  0, 2.0f / viewportHeight, 0, 0,
                                  0, 0, 1 / (farPlane - nearPlane), 0,
-                                 -1.0f / viewportWidth, -1.0f / viewportHeight, 0, 1); ;
+                                 -1.0f / viewportWidth, -1.0f / viewportHeight, 0, 1);
+        }
+
+        public static Matrix4x4 Perspective(float fieldOfView, int viewportWidth, int viewportHeight, float nearClipPlane, float farClipPlane)
+        {
+            float t = Mathf.Tan(fieldOfView * Mathf.Deg2Rad * 0.5f);
+            float a = viewportWidth / (float)viewportHeight;
+            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
+                                 0, 1.0f / t, 0, 0,
+                                 0, 0, farClipPlane/(farClipPlane - nearClipPlane), 1,
+                                 0, 0, (farClipPlane / (farClipPlane - nearClipPlane)) * nearClipPlane, 0);
         }
 
 
