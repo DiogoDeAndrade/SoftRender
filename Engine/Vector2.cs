@@ -22,6 +22,8 @@ namespace SoftRender.Engine
         public static Vector2 operator /(Vector2 v, float s) => new Vector2(v.x / s, v.y / s);
 
         static public float Dot(Vector2 a, Vector2 b) => a.x * b.x + a.y * b.y;
+        static public Vector2 Round(Vector2 v) => new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));
+        static public Vector2 FloorToInt(Vector2 v) => new Vector2(Mathf.FloorToInt(v.x), Mathf.FloorToInt(v.y));
 
         public float magnitude
         {

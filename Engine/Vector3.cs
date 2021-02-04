@@ -17,7 +17,7 @@ namespace SoftRender.Engine
         public static Vector3 operator +(Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector3 operator +(Vector3 a, Vector2 b) => new Vector3(a.x + b.x, a.y + b.y, a.z);
         public static Vector3 operator +(Vector2 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, b.z);
-        public static Vector3 operator +(Vector3 a, float b) => new Vector3(a.x + b, a.y + b, b);
+        public static Vector3 operator +(Vector3 a, float b) => new Vector3(a.x + b, a.y + b, a.z + b);
         public static Vector3 operator -(Vector3 a, Vector3 b) => new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
         public static Vector3 operator -(Vector3 a) => new Vector3(-a.x, -a.y, -a.z);
         public static Vector3 operator *(Vector3 v, float s) => new Vector3(v.x * s, v.y * s, v.z * s);
@@ -40,6 +40,7 @@ namespace SoftRender.Engine
         }
 
         static public Vector3 Round(Vector3 v) => new Vector3(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z));
+        static public Vector3 FloorToInt(Vector3 v) => new Vector3(Mathf.FloorToInt(v.x), Mathf.FloorToInt(v.y), Mathf.FloorToInt(v.z));
         static public float Dot(Vector3 a, Vector3 b) => a.x * b.x + a.y * b.y + a.z * b.z;
         static public Vector3 Cross(Vector3 a, Vector3 b)
         {

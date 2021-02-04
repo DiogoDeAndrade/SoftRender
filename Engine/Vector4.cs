@@ -31,6 +31,8 @@ namespace SoftRender.Engine
         public static Vector4 operator /(Vector4 v, float s) => new Vector4(v.x / s, v.y / s, v.z / s, v.w / s);
 
         static public float Dot(Vector4 a, Vector4 b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+        static public Vector4 Round(Vector4 v) => new Vector4(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z), Mathf.Round(v.w));
+        static public Vector4 FloorToInt(Vector4 v) => new Vector4(Mathf.FloorToInt(v.x), Mathf.FloorToInt(v.y), Mathf.FloorToInt(v.z), Mathf.FloorToInt(v.w));
 
         public float magnitude
         {

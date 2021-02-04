@@ -344,7 +344,7 @@ namespace SoftRender.Engine
         }
         public void DrawTriangleScanline(FatVertex p1, FatVertex p2, FatVertex p3)
         {
-            Vector2[]   p = new Vector2[] { p1.position.xy, p2.position.xy, p3.position.xy };
+            Vector2[]   p = new Vector2[] { Vector2.FloorToInt(p1.position.xy), Vector2.FloorToInt(p2.position.xy), Vector2.FloorToInt(p3.position.xy) };
             Color[]     c = new Color[] { p1.color, p2.color, p3.color };
 
             // Find smallest Y
@@ -361,6 +361,17 @@ namespace SoftRender.Engine
                 if (i == minIndexY) continue;
                 if ((minIndexX == -1) || (p[minIndexX].x > p[i].x)) minIndexX = i;
                 if ((maxIndexX == -1) || (p[maxIndexX].x < p[i].x)) maxIndexX = i;
+            }
+
+            // Check if minIndexX == maxIndexX(there is a vertical edge, need to solve for it)
+            if (minIndexX == maxIndexX)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if ((i == minIndexX) || (i == minIndexY)) continue;
+                    maxIndexX = i;
+                    break;
+                }
             }
 
             // Find Y limits
@@ -429,10 +440,14 @@ namespace SoftRender.Engine
                 if (y >= 0)
                 {
                     // Fill span
-                    int m1 = (minX >= 0) ? ((int)minX) : (0);
-                    int m2 = (maxX < width) ? ((int)maxX) : (width - 1);
+                    int m1 = (int)minX;
+                    int m2 = (int)maxX;
+                    if (m1 > m2) (m1, m2) = (m2, m1);
 
-                    int idx = y * width + m1;                    
+                    m1 = (m1 > 0) ? (m1) : (0);
+                    m2 = (m2 < width) ? (m2) : (width - 1);
+
+                    int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
                     {
                         data[idx++] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
@@ -464,8 +479,12 @@ namespace SoftRender.Engine
                 if (y >= 0)
                 {
                     // Fill span
-                    int m1 = (minX >= 0) ? ((int)minX) : (0);
-                    int m2 = (maxX < width) ? ((int)maxX) : (width - 1);
+                    int m1 = (int)minX;
+                    int m2 = (int)maxX;
+                    if (m1 > m2) (m1, m2) = (m2, m1);
+
+                    m1 = (m1 > 0) ? (m1) : (0);
+                    m2 = (m2 < width) ? (m2) : (width - 1);
 
                     int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
