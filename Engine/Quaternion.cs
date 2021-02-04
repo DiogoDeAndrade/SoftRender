@@ -15,11 +15,26 @@
             this.z = z;
             this.w = w;
         }
+        public Quaternion(Vector3 v)
+        {
+            x = v.x;
+            y = v.y;
+            z = v.z;
+            w = 0;
+        }
 
         public static Quaternion operator *(Quaternion a, Quaternion b) => new Quaternion(a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y, 
                                                                                           a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x, 
                                                                                           a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
                                                                                           a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z);
+        public static Vector3 operator *(Quaternion a, Vector3 v)
+        {
+            var c = a.conj;
+            var qv = new Quaternion(v);
+            var qr = (a * qv) * c;
+
+            return new Vector3(qr.x, qr.y, qr.z);
+        }
         public static Quaternion operator -(Quaternion a) => a.inversed;
 
         public override string ToString()
@@ -35,6 +50,8 @@
                 return new Quaternion(-x * inv_norm, -y * inv_norm, -z * inv_norm, w * inv_norm);
             }
         }
+
+        public Quaternion conj => new Quaternion(-x, -y, -z, w);
 
         public float magnitude
         {

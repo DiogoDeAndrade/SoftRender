@@ -144,5 +144,18 @@ namespace SoftRender.UnityApp
                 key[i] = srcData[j];
             }
         }
+
+        // Doesn't exist on Unity
+        static public Vector2 mouseDelta
+        {
+            get
+            {
+                int x, y;
+
+                SDL2.SDL.SDL_GetRelativeMouseState(out x, out y);
+
+                return new Vector2(x, y);
+            }
+        }
     }
 }

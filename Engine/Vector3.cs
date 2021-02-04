@@ -54,6 +54,8 @@ namespace SoftRender.Engine
         public Vector2 zx { get => new Vector2(z, x); set => (z, x) = (value.x, value.y); }
         public Vector2 zy { get => new Vector2(z, y); set => (z, y) = (value.x, value.y); }
 
+        public Vector3 x0z => new Vector3(x, 0, z);
+
         public static Vector3 zero = new Vector3(0, 0, 0);
         public static Vector3 one = new Vector3(1, 1, 1);
         public static Vector3 up = new Vector3(0, 1, 0);

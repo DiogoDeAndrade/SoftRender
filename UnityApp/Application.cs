@@ -34,6 +34,15 @@ namespace SoftRender.UnityApp
             current = null;
         }
 
+        protected override bool Startup()
+        {
+            if (!base.Startup()) return false;
+
+            SDL2.SDL.SDL_SetRelativeMouseMode(SDL2.SDL.SDL_bool.SDL_TRUE);
+
+            return true;
+        }
+
         protected override void Loop()
         {
             // Poll keyboard

@@ -6,13 +6,13 @@ namespace SoftRender.Engine
 {
     public class Application
     {
-        IntPtr  window;
         IntPtr  windowSurface;
         IntPtr  renderer;
         Bitmap  primarySurface;
         long    currentTimestamp;
 
-        protected Bitmap  screen;
+        protected IntPtr    window;
+        protected Bitmap    screen;
 
         protected Color     clearColor;
         protected int       windowResX, windowResY;
@@ -131,7 +131,7 @@ namespace SoftRender.Engine
             return true;
         }
 
-        bool Startup()
+        virtual protected bool Startup()
         {
             Random.InitState((int)DateTime.Now.Ticks);
 
