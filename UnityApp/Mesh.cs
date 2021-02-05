@@ -223,12 +223,11 @@ namespace SoftRender.UnityApp
             {
                 if (anythingButPosition)
                 {
+                    var shouldCull = material.GetCullFunction();
+
                     for (int i = 0; i < _triangles.Length; i += 3)
                     {
-                        Vector3 faceNormal = GetFaceNormal(vertexStream[_triangles[i]].position.xyz,
-                                                           vertexStream[_triangles[i + 1]].position.xyz,
-                                                           vertexStream[_triangles[i + 2]].position.xyz);
-                        if (faceNormal.z > 0)
+                        if (!shouldCull(vertexStream[_triangles[i]], vertexStream[_triangles[i + 1]], vertexStream[_triangles[i + 2]]))
                         {
                             Application.currentScreen.DrawTriangle(vertexStream[_triangles[i]],
                                                                    vertexStream[_triangles[i + 1]],
