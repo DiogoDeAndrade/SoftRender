@@ -111,12 +111,12 @@ namespace SoftRender.Engine
         {
             Matrix4x4 ret = new Matrix4x4(0);
 
-            for (int i = 0; i < 4; i = i + 1)
+            for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 4; j = j + 1)
+                for (int j = 0; j < 4; j++)
                 {
                     float val = 0.0f;
-                    for (int d = 0; d < 4; d = d + 1)
+                    for (int d = 0; d < 4; d++)
                         val = val + a[i, d] * b[d, j];
                     ret[i, j] = val;
                 }
@@ -166,9 +166,9 @@ namespace SoftRender.Engine
                 float[] dst = new float[16];
                 float det; /* determinant */
                 /* transpose matrix */
-                for (int i = 0; i < 4; i = i + 1)
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int j = 0; j < 4; j = j + 1)
+                    for (int j = 0; j < 4; j++)
                     {
                         src[i * 4 + j] = m[j, i];
                     }
@@ -237,7 +237,7 @@ namespace SoftRender.Engine
                 det = src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3];
                 /* calculate matrix inverse */
                 det = 1 / det;
-                for (int j = 0; j < 16; j = j + 1) dst[j] *= det;
+                for (int j = 0; j < 16; j++) dst[j] *= det;
 
                 return new Matrix4x4(dst[0], dst[1], dst[2], dst[3],
                                      dst[4], dst[5], dst[6], dst[7],

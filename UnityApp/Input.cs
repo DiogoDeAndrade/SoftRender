@@ -124,7 +124,7 @@ namespace SoftRender.UnityApp
 
             bool* srcData = (bool*)keys;
 
-            for (int j = 0; j < numKeys; j = j + 1)
+            for (int j = 0; j < numKeys; j++)
             {
                 int i = (int)SDL2.SDL.SDL_GetKeyFromScancode((SDL2.SDL.SDL_Scancode)j);
                 if (i > 4096) continue;

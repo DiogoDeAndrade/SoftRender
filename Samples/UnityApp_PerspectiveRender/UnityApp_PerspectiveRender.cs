@@ -1,5 +1,6 @@
 ﻿using SoftRender.Engine;
 using SoftRender.UnityApp;
+using SoftRender.UnityApp.Defaults;
 
 namespace SoftRender.Samples.UnityApp.PerspectiveRender
 {

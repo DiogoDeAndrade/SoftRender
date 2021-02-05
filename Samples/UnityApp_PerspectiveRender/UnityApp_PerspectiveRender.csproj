@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\UnityAppDefaults\UnityAppDefaults.csproj" />
     <ProjectReference Include="..\..\UnityApp\UnityApp.csproj" />
   </ItemGroup>
 

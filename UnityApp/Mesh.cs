@@ -186,13 +186,13 @@ namespace SoftRender.UnityApp
                     vertexStream = new FatVertex[vertices.Length];
                 }
 
-                if (colors0 != null) for (int i = 0; i < vertices.Length; i = i + 1) vertexStream[i].color = _colors0[i];
+                if (colors0 != null) for (int i = 0; i < vertices.Length; i++) vertexStream[i].color = _colors0[i];
             }
 
             int w = Application.currentScreen.width >> 1;
             int h = Application.currentScreen.height >> 1;
 
-            for (int i = 0; i < vertexStream.Length; i = i + 1)
+            for (int i = 0; i < vertexStream.Length; i++)
             {
                 vertexStream[i].position = objectClipMatrix * new Vector4(_vertices[i], 1);
                 vertexStream[i].position.xyz /= vertexStream[i].position.w;
@@ -202,14 +202,12 @@ namespace SoftRender.UnityApp
 
             if (material.isWireframe)
             {
-                for (int i = 0; i < _triangles.Length; i = i + 3)
-                {
-                    Vector3 faceNormal = GetFaceNormal(vertexStream[_triangles[i]].position.xyz,
-                                      vertexStream[_triangles[i + 1]].position.xyz,
-                                      vertexStream[_triangles[i + 2]].position.xyz);
-                    if (faceNormal.z > 0)
-                    {
+                var shouldCull = material.GetCullFunction();
 
+                for (int i = 0; i < _triangles.Length; i+=3)
+                {
+                    if (!shouldCull(vertexStream[_triangles[i]], vertexStream[_triangles[i + 1]], vertexStream[_triangles[i + 2]]))
+                    {
                         Application.currentScreen.DrawLine(vertexStream[_triangles[i]].position.xy,
                                                        vertexStream[_triangles[i + 1]].position.xy, material.baseColor);
                         Application.currentScreen.DrawLine(vertexStream[_triangles[i + 1]].position.xy,
@@ -225,7 +223,7 @@ namespace SoftRender.UnityApp
                 {
                     var shouldCull = material.GetCullFunction();
 
-                    for (int i = 0; i < _triangles.Length; i = i + 3)
+                    for (int i = 0; i < _triangles.Length; i+=3)
                     {
                         if (!shouldCull(vertexStream[_triangles[i]], vertexStream[_triangles[i + 1]], vertexStream[_triangles[i + 2]]))
                         {

@@ -179,7 +179,7 @@ namespace SoftRender.Engine
                 {
                     Color32* srcLine = srcData;
 
-                    for (int y = 0; y < src.height; y = y + 1)
+                    for (int y = 0; y < src.height; y++)
                     {
                         Buffer.MemoryCopy(srcLine, destData.ToPointer(), src.width * src.height * 4, src.width * 4);
 

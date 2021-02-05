@@ -55,7 +55,7 @@ namespace SoftRender.Samples.Fireworks
 
             public void SpawnParticles(int nParticles)
             {
-                for (int i = 0; i < nParticles; i = i + 1)
+                for (int i = 0; i < nParticles; i++)
                 {
                     Particle particle = new Particle
                     {
