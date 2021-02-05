@@ -141,7 +141,6 @@ namespace SoftRender.Engine
             DrawLine_Unclipped(p1, p2, (Color32)color);
 
         }
-
         public void DrawLine_Unclipped(Vector2 p1, Vector2 p2, Color32 color)
         {
             float dx = Mathf.Abs(p1.x - p2.x);
@@ -215,6 +214,11 @@ namespace SoftRender.Engine
 
         public void DrawTriangle(FatVertex p1, FatVertex p2, FatVertex p3)
         {
+            // Do the near/far culling - for now just eliminate triangles completely
+            if (p1.position.w <= 0) return;
+            if (p2.position.w <= 0) return;
+            if (p3.position.w <= 0) return;
+
             DrawTriangleScanline(p1, p2, p3);
         }
 

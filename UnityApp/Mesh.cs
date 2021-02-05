@@ -195,7 +195,7 @@ namespace SoftRender.UnityApp
             for (int i = 0; i < vertexStream.Length; i++)
             {
                 vertexStream[i].position = objectClipMatrix * new Vector4(_vertices[i], 1);
-                vertexStream[i].position /= vertexStream[i].position.w;
+                vertexStream[i].position.xyz /= vertexStream[i].position.w;
                 vertexStream[i].position.x = vertexStream[i].position.x * w + w;
                 vertexStream[i].position.y = -vertexStream[i].position.y * h + h;
             }
