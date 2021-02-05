@@ -17,7 +17,7 @@ namespace SoftRender.UnityApp
 
         }
 
-        public virtual void InitUnityComponent()
+        public virtual void InitUnityComponent(bool waitLoad = false)
         {
 
         }

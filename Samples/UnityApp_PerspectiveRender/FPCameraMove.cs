@@ -3,10 +3,15 @@ using SoftRender.UnityApp;
 
 namespace SoftRender.Samples.UnityApp.PerspectiveRender
 {
-    class FPSCameraMove : MonoBehaviour
+    class FPCameraMove : MonoBehaviour
     {
         public float moveSpeed = 1.0f;
         public float rotateSpeed = 45.0f;
+
+        void Start()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         void Update()
         {
@@ -20,6 +25,10 @@ namespace SoftRender.Samples.UnityApp.PerspectiveRender
             Vector2 mouseDelta = Input.mouseDelta / 50.0f;
 
             Quaternion currentRotation = transform.rotation;
+
+            currentRotation = Quaternion.AngleAxis(rotateSpeed * mouseDelta.x * Time.deltaTime, Vector3.up) * currentRotation;
+            Vector3 newRight = currentRotation * Vector3.right;
+            currentRotation = Quaternion.AngleAxis(rotateSpeed * mouseDelta.y * Time.deltaTime, newRight) * currentRotation;
 
             transform.rotation = currentRotation;
         }

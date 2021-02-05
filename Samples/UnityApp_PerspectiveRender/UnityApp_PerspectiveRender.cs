@@ -40,7 +40,7 @@ namespace SoftRender.Samples.UnityApp.PerspectiveRender
             };
             meshFilter.mesh = mesh;
 
-            mainCamera.gameObject.AddComponent<FPSCameraMove>();
+            mainCamera.gameObject.AddComponent<FPCameraMove>();
             mainCamera.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
             //mainCamera.transform.rotation = Quaternion.Euler(24.0f, 84.0f, 0);
             mainCamera.pixelPerfect = true;
