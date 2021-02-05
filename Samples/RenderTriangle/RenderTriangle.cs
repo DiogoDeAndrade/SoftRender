@@ -35,7 +35,7 @@ namespace SoftRender.Samples.RenderTriangle
             Vector2 center = new Vector2(500, 400);
             float   radius = 25.0f;
             
-            for (int i = 0; i < nSides; i++)
+            for (int i = 0; i < nSides; i = i + 1)
             {
                 Vector2 p1 = new Vector2(center.x + radius * Mathf.Cos(angleDiv * i), center.y + radius * Mathf.Sin(angleDiv * i));
                 Vector2 p2 = new Vector2(center.x + radius * Mathf.Cos(angleDiv * (i + 1)), center.y + radius * Mathf.Sin(angleDiv * (i + 1)));

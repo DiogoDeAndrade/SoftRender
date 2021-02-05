@@ -81,7 +81,7 @@ namespace SoftRender.UnityApp
             currentScreen.Write(x, y, txt, current.defaultFont, textColor, backgroundColor);
         }
 
-        public IntPtr GetWindowPtr()
+        internal IntPtr GetWindowPtr()
         {
             return window;
         }

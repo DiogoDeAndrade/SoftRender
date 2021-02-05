@@ -48,13 +48,13 @@ namespace SoftRender.Engine
             int x2 = Math.Max((int)rect.x2, 0); x2 = Math.Min(x2, width - 1);
             int y2 = Math.Max((int)rect.y2, 0); y2 = Math.Min(y2, height - 1);
 
-            for (int y = y1; y < y2; y++)
+            for (int y = y1; y < y2; y = y + 1)
             {
                 int idx = x1 + y * width;
-                for (int x = x1; x < x2; x++)
+                for (int x = x1; x < x2; x = x + 1)
                 {
                     data[idx] = color;
-                    idx++;
+                    idx = idx + 1;
                 }
             }
         }
@@ -167,10 +167,10 @@ namespace SoftRender.Engine
 
                 float y = y1;
                 float incY = (y2 - y1) / (float)(x2 - x1);
-                for (int x = x1; x <= x2; x++)
+                for (int x = x1; x <= x2; x = x + 1)
                 {
                     data[x + (int)y * width] = color;
-                    y += incY;
+                    y = y + incY;
                 }
             }
             else
@@ -194,10 +194,10 @@ namespace SoftRender.Engine
 
                 float x = x1;
                 float incX = (x2 - x1) / (float)(y2 - y1);
-                for (int y = y1; y <= y2; y++)
+                for (int y = y1; y <= y2; y = y + 1)
                 {
                     data[(int)x + y * width] = color;
-                    x += incX;
+                    x = x + incX;
                 }
             }
         }
@@ -235,7 +235,7 @@ namespace SoftRender.Engine
             int minIndexX, maxIndexX;
             minIndexX = maxIndexX = -1;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i = i + 1)
             {
                 if (i == minIndexY) continue;
                 if ((minIndexX == -1) || (p[minIndexX].x > p[i].x)) minIndexX = i;
@@ -294,7 +294,7 @@ namespace SoftRender.Engine
                 incMaxX = (p[midIndexY].x - maxX) / (p[midIndexY].y - p[minIndexY].y);
             }
 
-            for (int y = y1; y < y2; y++)
+            for (int y = y1; y < y2; y = y + 1)
             {
                 if (y >= 0)
                 {
@@ -303,14 +303,15 @@ namespace SoftRender.Engine
                     int m2 = (maxX < width) ? ((int)maxX) : (width - 1);
 
                     int idx = y * width + m1;
-                    for (int x = m1; x <= m2; x++)
+                    for (int x = m1; x <= m2; x = x + 1)
                     {
-                        data[idx++] = color;
+                        data[idx] = color;
+                        idx = idx + 1;
                     }
                 }
 
-                minX += incMinX;
-                maxX += incMaxX;
+                minX = minX + incMinX;
+                maxX = maxX + incMaxX;
             }
 
             // Out of the bottom of the screen, no point in more calculations
@@ -327,7 +328,7 @@ namespace SoftRender.Engine
 
             if (y3 >= height) y3 = height - 1;
 
-            for (int y = y2; y <= y3; y++)
+            for (int y = y2; y <= y3; y = y + 1)
             {
                 if (y >= 0)
                 {
@@ -336,14 +337,15 @@ namespace SoftRender.Engine
                     int m2 = (maxX < width) ? ((int)maxX) : (width - 1);
 
                     int idx = y * width + m1;
-                    for (int x = m1; x <= m2; x++)
+                    for (int x = m1; x <= m2; x = x + 1)
                     {
-                        data[idx++] = color;
+                        data[idx] = color;
+                        idx = idx + 1;
                     }
                 }
 
-                minX += incMinX;
-                maxX += incMaxX;
+                minX = minX + incMinX;
+                maxX = maxX + incMaxX;
             }
         }
         public void DrawTriangleScanline(FatVertex p1, FatVertex p2, FatVertex p3)
@@ -439,7 +441,7 @@ namespace SoftRender.Engine
                 incMaxC = (c[midIndexY] - maxC) / (p[midIndexY].y - p[minIndexY].y);
             }
 
-            for (int y = y1; y < y2; y++)
+            for (int y = y1; y < y2; y = y + 1)
             {
                 if (y >= 0)
                 {
@@ -452,14 +454,15 @@ namespace SoftRender.Engine
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
                     int idx = y * width + m1;
-                    for (int x = m1; x <= m2; x++)
+                    for (int x = m1; x <= m2; x = x + 1)
                     {
-                        data[idx++] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        data[idx] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        idx = idx + 1;
                     }
                 }
 
-                minX += incMinX; minC += incMinC;
-                maxX += incMaxX; maxC += incMaxC;
+                minX = minX + incMinX; minC = minC + incMinC;
+                maxX = maxX + incMaxX; maxC = maxC + incMaxC;
             }
 
             // Out of the bottom of the screen, no point in more calculations
@@ -478,7 +481,7 @@ namespace SoftRender.Engine
 
             if (y3 >= height) y3 = height - 1;
 
-            for (int y = y2; y <= y3; y++)
+            for (int y = y2; y <= y3; y = y + 1)
             {
                 if (y >= 0)
                 {
@@ -491,14 +494,15 @@ namespace SoftRender.Engine
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
                     int idx = y * width + m1;
-                    for (int x = m1; x <= m2; x++)
+                    for (int x = m1; x <= m2; x = x + 1)
                     {
-                        data[idx++] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        data[idx] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        idx = idx + 1;
                     }
                 }
 
-                minX += incMinX; minC += incMinC;
-                maxX += incMaxX; maxC += incMaxC;
+                minX = minX + incMinX; minC = minC + incMinC;
+                maxX = maxX + incMaxX; maxC = maxC + incMaxC;
             }
         }
 
@@ -514,14 +518,14 @@ namespace SoftRender.Engine
                     height = image.Height;
 
                     data = new Color32[width * height];
-                    for (int y = 0; y < height; y++)
+                    for (int y = 0; y < height; y = y + 1)
                     {
                         var rowData = image.Frames.RootFrame.GetPixelRowSpan(y);
                         var targetIndex = y * width;
-                        for (int x = 0; x < width; x++)
+                        for (int x = 0; x < width; x = x + 1)
                         {
                             data[targetIndex].Set(rowData[x].R, rowData[x].G, rowData[x].B, rowData[x].A);
-                            targetIndex++;
+                            targetIndex = targetIndex + 1;
                         }
                     }
                 }
@@ -550,7 +554,7 @@ namespace SoftRender.Engine
             int startY = y;
             int endY = y + srcHeight;
 
-            for (int yy = startY; yy < endY; yy++)
+            for (int yy = startY; yy < endY; yy = yy + 1)
             {
                 if (yy < 0) continue;
                 else if (yy >= height) break;
@@ -559,7 +563,7 @@ namespace SoftRender.Engine
                 int srcIndex = (yy - startY) * srcWidth;
                 int endX = startX + srcWidth;
 
-                for (int xx = startX; xx < endX; xx++)
+                for (int xx = startX; xx < endX; xx = xx + 1)
                 {
                     if (xx >= 0)
                     {
@@ -567,8 +571,8 @@ namespace SoftRender.Engine
 
                         data[destIndex] = Color32.Lerp(data[destIndex], src.data[srcIndex], src.data[srcIndex].a);
                     }
-                    destIndex++;
-                    srcIndex++;
+                    destIndex = destIndex + 1;
+                    srcIndex = srcIndex + 1;
                 }
             }
         }
@@ -588,7 +592,7 @@ namespace SoftRender.Engine
             int startY = y;
             int endY = y + srcHeight;
 
-            for (int yy = startY; yy < endY; yy++)
+            for (int yy = startY; yy < endY; yy = yy + 1)
             {
                 if (yy < 0) continue;
                 else if (yy >= height) break;
@@ -597,7 +601,7 @@ namespace SoftRender.Engine
                 int srcIndex = (yy - startY + (int)srcRect.y1) * src.width + (int)srcRect.x1;
                 int endX = startX + srcWidth;
 
-                for (int xx = startX; xx < endX; xx++)
+                for (int xx = startX; xx < endX; xx = xx + 1)
                 {
                     if (xx >= 0)
                     {
@@ -605,8 +609,8 @@ namespace SoftRender.Engine
 
                         data[destIndex] = Color32.Lerp(data[destIndex], src.data[srcIndex], src.data[srcIndex].a);
                     }
-                    destIndex++;
-                    srcIndex++;
+                    destIndex = destIndex + 1;
+                    srcIndex = srcIndex + 1;
                 }
             }
         }
@@ -626,7 +630,7 @@ namespace SoftRender.Engine
             int startY = y;
             int endY = y + srcHeight;
 
-            for (int yy = startY; yy < endY; yy++)
+            for (int yy = startY; yy < endY; yy = yy + 1)
             {
                 if (yy < 0) continue;
                 else if (yy >= height) break;
@@ -635,7 +639,7 @@ namespace SoftRender.Engine
                 int srcIndex = (yy - startY + (int)srcRect.y1) * src.width + (int)srcRect.x1;
                 int endX = startX + srcWidth;
 
-                for (int xx = startX; xx < endX; xx++)
+                for (int xx = startX; xx < endX; xx = xx + 1)
                 {
                     if (xx >= 0)
                     {
@@ -643,8 +647,8 @@ namespace SoftRender.Engine
 
                         data[destIndex] = Color32.Lerp(data[destIndex], c, src.data[srcIndex].a);
                     }
-                    destIndex++;
-                    srcIndex++;
+                    destIndex = destIndex + 1;
+                    srcIndex = srcIndex + 1;
                 }
             }
         }
@@ -657,29 +661,29 @@ namespace SoftRender.Engine
             float srcY = 0.0f;
             float inc = scale;
 
-            for (int py = 0; py < src.height * p; py++)
+            for (int py = 0; py < src.height * p; py = py + 1)
             {
                 int destIdx = x + py * width;
                 int srcLineIdx = Mathf.FloorToInt(srcY) * src.width;
                 
                 srcX = 0.0f;
 
-                for (int px = 0; px < src.width * p; px++)
+                for (int px = 0; px < src.width * p; px = px + 1)
                 {
                     int srcIdx = Mathf.FloorToInt(srcX) + srcLineIdx;
                     data[destIdx] = src.data[srcIdx];
 
-                    destIdx++;
-                    srcX += inc;
+                    destIdx = destIdx + 1;
+                    srcX = srcX + inc;
                 }
 
-                srcY += inc;
+                srcY = srcY + inc;
             }
         }
 
         public void SwapRB()
         {
-            for (int i = 0; i < width * height; i++)
+            for (int i = 0; i < width * height; i = i + 1)
             {
                 data[i].Set(data[i].b, data[i].g, data[i].r, data[i].a);
             }
@@ -687,7 +691,7 @@ namespace SoftRender.Engine
 
         public void SwapRB(Bitmap src)
         {
-            for (int i = 0; i < width * height; i++)
+            for (int i = 0; i < width * height; i = i + 1)
             {
                 data[i].Set(src.data[i].b, src.data[i].g, src.data[i].r, src.data[i].a);
             }

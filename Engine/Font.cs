@@ -36,7 +36,7 @@ namespace SoftRender.Engine
                     if (c == '\n')
                     {
                         xx = x;
-                        yy += charHeight;
+                        yy = yy + charHeight;
                     }
                     continue;
                 }
@@ -47,7 +47,7 @@ namespace SoftRender.Engine
                 r.x2 = r.x1 + charWidth;
                 r.y2 = r.y1 + charHeight;
                 target.BlitMask(xx, yy, this, r, color);
-                xx += charWidth;
+                xx = xx + charWidth;
             }
         }
 
@@ -64,13 +64,13 @@ namespace SoftRender.Engine
                     if (c == '\n')
                     {
                         xx = x;
-                        yy += charHeight;
+                        yy = yy + charHeight;
                         ret.y2 = Mathf.Max(ret.y2, yy + charHeight);
                     }
                     continue;
                 }
 
-                xx += charWidth;
+                xx = xx + charWidth;
 
                 ret.x2 = Mathf.Max(ret.x2, xx);
             }

@@ -119,7 +119,7 @@ namespace SoftRender.Engine
 #if DEBUG
                 if (deltaTime > 0.1) deltaTime = 0.1f;
 #endif
-                currentTime += deltaTime;
+                currentTime = currentTime + deltaTime;
                 currentTimestamp = t;
             }
 
@@ -179,12 +179,12 @@ namespace SoftRender.Engine
                 {
                     Color32* srcLine = srcData;
 
-                    for (int y = 0; y < src.height; y++)
+                    for (int y = 0; y < src.height; y = y + 1)
                     {
                         Buffer.MemoryCopy(srcLine, destData.ToPointer(), src.width * src.height * 4, src.width * 4);
 
-                        srcLine += src.width;
-                        destData += surfaceData.pitch;
+                        srcLine = srcLine + src.width;
+                        destData = destData + surfaceData.pitch;
                     }
                 }
             }

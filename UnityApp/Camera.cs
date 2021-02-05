@@ -42,7 +42,7 @@ namespace SoftRender.UnityApp
                 int count = 0;
                 foreach (var camera in cameras)
                 {
-                    if (camera.isActiveAndEnabled) count++;
+                    if (camera.isActiveAndEnabled) count = count + 1;
                 }
                 return count;
             }

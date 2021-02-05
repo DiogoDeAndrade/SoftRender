@@ -32,15 +32,15 @@ namespace SoftRender.Samples.SineWaves
         {
             float amplitude = 0.5f / sines.Length;
 
-            for (int y = 0; y < resY; y++)
+            for (int y = 0; y < resY; y = y + 1)
             {
-                for (int x = 0; x < resX; x++)
+                for (int x = 0; x < resX; x = x + 1)
                 {
                     float c = 0;
 
-                    for (int s = 0; s < sines.Length; s++)
+                    for (int s = 0; s < sines.Length; s = s + 1)
                     {
-                        c += Mathf.Clamp01(SineWave(sines[s].direction, sines[s].amplitude, sines[s].frequency, x, y, sines[s].speed));
+                        c = c + Mathf.Clamp01(SineWave(sines[s].direction, sines[s].amplitude, sines[s].frequency, x, y, sines[s].speed));
                     }
 
                     byte c32 = (byte)(c * 255.0f);
