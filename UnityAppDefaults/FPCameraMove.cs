@@ -35,8 +35,8 @@ namespace SoftRender.UnityApp.Defaults
 
         void OnPostRender()
         {
-            SoftRender.UnityApp.Application.Write(0, 10, "Camera Position = " + transform.position, Color.white, Color.black);
-            SoftRender.UnityApp.Application.Write(0, 20, "Camera Rotation = " + transform.rotation.eulerAngles, Color.white, Color.black);
+            Application.Write(0, 10, "Camera Position = " + transform.position, Color.white, Color.black);
+            Application.Write(0, 20, "Camera Rotation = " + transform.rotation.eulerAngles, Color.white, Color.black);
         }
     }
 }

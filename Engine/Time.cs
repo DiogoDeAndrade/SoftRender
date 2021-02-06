@@ -10,11 +10,11 @@ namespace SoftRender.Engine
     {
         public static float deltaTime
         {
-            get { return Application.deltaTime; }
+            get { return Application.current.deltaTime; }
         }
         public static float time
         {
-            get { return Application.currentTime; }
+            get { return Application.current.currentTime; }
         }
 
         public static double tickCount

@@ -80,15 +80,6 @@ namespace SoftRender.Engine
                         0, 1.0f / th, 0, 0,
                         0, 0, farClipPlane/ deltaClip, 1,
                         0, 0, -(farClipPlane * nearClipPlane/ deltaClip), 0);
-
-/*            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
-                                 0, 1.0f / t, 0, 0,
-                                 0, 0, -farClipPlane/ deltaClip, 1,
-                                 0, 0, -(farClipPlane / deltaClip) * nearClipPlane, 0);*/
-/*            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
-                                 0, 1.0f / t, 0, 0,
-                                 0, 0, -farClipPlane / deltaClip, -1,
-                                 0, 0, -(farClipPlane * nearClipPlane) / deltaClip, 0);*/
         }
 
 

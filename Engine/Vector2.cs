@@ -20,6 +20,18 @@ namespace SoftRender.Engine
         public static Vector2 operator *(Vector2 v, float s) => new Vector2(v.x * s, v.y * s);
         public static Vector2 operator *(float s, Vector2 v) => new Vector2(v.x * s, v.y * s);
         public static Vector2 operator /(Vector2 v, float s) => new Vector2(v.x / s, v.y / s);
+        public static bool operator ==(Vector2 a, Vector2 b) => a.Equals(b);
+        public static bool operator !=(Vector2 a, Vector2 b) => !a.Equals(b);
+
+        public override bool Equals(object obj)
+        {
+            Vector2 tmp = (Vector2)obj;
+            return (tmp.x == x) && (tmp.y == y);
+        }
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode();
+        }
 
         static public float Dot(Vector2 a, Vector2 b) => a.x * b.x + a.y * b.y;
         static public Vector2 Round(Vector2 v) => new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));

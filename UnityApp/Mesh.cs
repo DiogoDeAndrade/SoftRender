@@ -1,9 +1,10 @@
 ﻿using SoftRender.Engine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SoftRender.UnityApp
 {
-    public class Mesh : Object
+    public class Mesh : Resource
     {
         int[]       _triangles;
         Vector3[]   _vertices;
@@ -15,6 +16,8 @@ namespace SoftRender.UnityApp
         Vector2[][] _uv;
         bool        vertex_modified;
         bool        anythingButPosition;
+
+        public Material defaultMaterial;
 
         public int[] triangles
         {
@@ -55,6 +58,7 @@ namespace SoftRender.UnityApp
 
         public Mesh(string name) : base(name)
         {
+            defaultMaterial = null;
             vertex_modified = true;
             anythingButPosition = false;
             _uv = new Vector2[8][];
@@ -187,18 +191,47 @@ namespace SoftRender.UnityApp
                 }
 
                 if (colors0 != null) for (int i = 0; i < vertices.Length; i++) vertexStream[i].color = _colors0[i];
+
+                vertex_modified = false;
             }
 
             int w = Application.currentScreen.width >> 1;
             int h = Application.currentScreen.height >> 1;
 
-            for (int i = 0; i < vertexStream.Length; i++)
+            const int clusterSize = 1024;
+
+            int clusters = vertexStream.Length / clusterSize;
+            var transformStage = Parallel.For(0, clusters, i =>
+            {
+                int idx = i * clusterSize;
+                for (int j = 0; j < clusterSize; j++)
+                {
+                    vertexStream[idx].position = objectClipMatrix * new Vector4(_vertices[idx], 1);
+                    vertexStream[idx].position.xyz /= vertexStream[idx].position.w;
+                    vertexStream[idx].position.x = vertexStream[idx].position.x * w + w;
+                    vertexStream[idx].position.y = -vertexStream[idx].position.y * h + h;
+                    idx++;
+                }
+            });
+
+            // Do the remaining
+            for (int idx = clusters * clusterSize; idx < vertexStream.Length; idx++)
+            {
+                vertexStream[idx].position = objectClipMatrix * new Vector4(_vertices[idx], 1);
+                vertexStream[idx].position.xyz /= vertexStream[idx].position.w;
+                vertexStream[idx].position.x = vertexStream[idx].position.x * w + w;
+                vertexStream[idx].position.y = -vertexStream[idx].position.y * h + h;
+            }
+
+            while (!transformStage.IsCompleted) { ; }//*/
+
+            /*for (int i = 0; i < vertexStream.Length; i++)
             {
                 vertexStream[i].position = objectClipMatrix * new Vector4(_vertices[i], 1);
                 vertexStream[i].position.xyz /= vertexStream[i].position.w;
                 vertexStream[i].position.x = vertexStream[i].position.x * w + w;
                 vertexStream[i].position.y = -vertexStream[i].position.y * h + h;
-            }
+            }//*/
 
             if (material.isWireframe)
             {

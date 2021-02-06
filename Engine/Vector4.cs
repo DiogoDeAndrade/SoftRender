@@ -29,6 +29,17 @@ namespace SoftRender.Engine
         public static Vector4 operator *(Vector4 v, float s) => new Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
         public static Vector4 operator *(float s, Vector4 v) => new Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
         public static Vector4 operator /(Vector4 v, float s) => new Vector4(v.x / s, v.y / s, v.z / s, v.w / s);
+        public static bool operator ==(Vector4 a, Vector4 b) => a.Equals(b);
+        public static bool operator !=(Vector4 a, Vector4 b) => !a.Equals(b);
+        public override bool Equals(object obj)
+        {
+            Vector4 tmp = (Vector4)obj;
+            return (tmp.x == x) && (tmp.y == y) && (tmp.z == z) && (tmp.w == w);
+        }
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() + w.GetHashCode();
+        }
 
         static public float Dot(Vector4 a, Vector4 b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
         static public Vector4 Round(Vector4 v) => new Vector4(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z), Mathf.Round(v.w));

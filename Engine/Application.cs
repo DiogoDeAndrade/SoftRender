@@ -24,8 +24,11 @@ namespace SoftRender.Engine
         protected bool      writeFPS;
         protected Font      defaultFont;
 
-        public static float deltaTime;
-        public static float currentTime;
+        public float deltaTime;
+        public float currentTime;
+        public float loopTime;
+
+        static public Application current;
 
         public int resX { get { return (int)(windowResX * resScale); } }
         public int resY { get { return (int)(windowResY * resScale); } }
@@ -47,6 +50,7 @@ namespace SoftRender.Engine
             }
             windowResX = 640;
             windowResY = 480;
+            current = this;
         }
 
         public bool Run()
@@ -96,7 +100,11 @@ namespace SoftRender.Engine
                     }
                 }
 
+                long t0 = DateTime.Now.Ticks;
                 Loop();
+                long t1 = DateTime.Now.Ticks;
+
+                loopTime = (t1 - t0) * 10e-7f;
 
                 if ((writeFPS) && (defaultFont != null))
                 {
@@ -119,9 +127,9 @@ namespace SoftRender.Engine
                 SDL.SDL_UpdateWindowSurface(window);
 
                 long t = DateTime.Now.Ticks;
-                deltaTime = (t - currentTimestamp) * 10e-7f;
+                deltaTime = (float)((t - currentTimestamp) * 10e-7);
 #if DEBUG
-                if (deltaTime > 0.1) deltaTime = 0.1f;
+                if (deltaTime > 1) deltaTime = 1;
 #endif
                 currentTime = currentTime + deltaTime;
                 currentTimestamp = t;
@@ -213,5 +221,11 @@ namespace SoftRender.Engine
         {
 
         }
+
+        public Bitmap GetScreen() => screen;
+
+        public Font GetDefaultFont() => defaultFont;
+
+        public IntPtr GetWindowPtr() => window;
     }
 }

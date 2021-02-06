@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SoftRender.Engine
 {

@@ -24,6 +24,18 @@ namespace SoftRender.Engine
         public static Vector3 operator *(float s, Vector3 v) => new Vector3(v.x * s, v.y * s, v.z * s);
         public static Vector3 operator /(Vector3 v, float s) => new Vector3(v.x / s, v.y / s, v.z / s);
 
+        public static bool operator ==(Vector3 a, Vector3 b) => a.Equals(b);
+        public static bool operator !=(Vector3 a, Vector3 b) => !a.Equals(b);
+        public override bool Equals(object obj)
+        {
+            Vector3 tmp = (Vector3)obj;
+            return (tmp.x == x) && (tmp.y == y) && (tmp.z == z);
+        }
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
+        }
+
         public float magnitude
         {
             get { return Mathf.Sqrt(x * x + y * y + z * z); }

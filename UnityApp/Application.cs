@@ -7,12 +7,11 @@ namespace SoftRender.UnityApp
 {
     public class Application : Engine.Application
     {
-        static public Application   current;
         static public Bitmap        currentScreen
         {
             get
             {
-                return current.screen;
+                return Application.current.GetScreen();
             }
         }
         public Camera mainCamera;
@@ -26,7 +25,6 @@ namespace SoftRender.UnityApp
 
             (windowResX, windowResY) = (1280, 960);
             resScale = 1.0f;
-            current = this;
         }
 
         ~Application()
@@ -76,12 +74,7 @@ namespace SoftRender.UnityApp
 
         public static void Write(int x, int y, string txt, Color textColor, Color backgroundColor)
         {
-            currentScreen.Write(x, y, txt, current.defaultFont, textColor, backgroundColor);
-        }
-
-        internal IntPtr GetWindowPtr()
-        {
-            return window;
+            currentScreen.Write(x, y, txt, current.GetDefaultFont(), textColor, backgroundColor);
         }
     }
 }
