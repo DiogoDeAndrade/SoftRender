@@ -71,12 +71,24 @@ namespace SoftRender.Engine
 
         public static Matrix4x4 Perspective(float fieldOfView, int viewportWidth, int viewportHeight, float nearClipPlane, float farClipPlane)
         {
-            float t = Mathf.Tan(fieldOfView * Mathf.Deg2Rad * 0.5f);
             float a = viewportWidth / (float)viewportHeight;
-            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
+            float tw = Mathf.Tan(a * fieldOfView * Mathf.Deg2Rad * 0.5f);
+            float th = Mathf.Tan(fieldOfView * Mathf.Deg2Rad * 0.5f);
+            float deltaClip = farClipPlane - nearClipPlane;
+
+            return new Matrix4x4(1.0f / tw, 0, 0, 0,
+                        0, 1.0f / th, 0, 0,
+                        0, 0, farClipPlane/ deltaClip, 1,
+                        0, 0, -(farClipPlane * nearClipPlane/ deltaClip), 0);
+
+/*            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
                                  0, 1.0f / t, 0, 0,
-                                 0, 0, farClipPlane/(farClipPlane - nearClipPlane), 1,
-                                 0, 0, (farClipPlane / (farClipPlane - nearClipPlane)) * nearClipPlane, 0);
+                                 0, 0, -farClipPlane/ deltaClip, 1,
+                                 0, 0, -(farClipPlane / deltaClip) * nearClipPlane, 0);*/
+/*            return new Matrix4x4(1.0f / (a * t), 0, 0, 0,
+                                 0, 1.0f / t, 0, 0,
+                                 0, 0, -farClipPlane / deltaClip, -1,
+                                 0, 0, -(farClipPlane * nearClipPlane) / deltaClip, 0);*/
         }
 
 

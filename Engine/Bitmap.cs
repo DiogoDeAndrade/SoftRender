@@ -12,8 +12,9 @@ namespace SoftRender.Engine
 
     public class Bitmap
     {
-        public Color32[] data;
-        public int width, height;
+        public Color32[]    data;
+        public float[]      depthBuffer;
+        public int          width, height;
 
         public Bitmap(int width, int height)
         {
@@ -30,15 +31,32 @@ namespace SoftRender.Engine
             Load(filename);
         }
 
-        public void Clear(Color color)
+        public void AttachDepthBuffer()
         {
-            Clear((Color32)color);
+            depthBuffer = new float[width * height];
         }
 
-        public void Clear(Color32 color)
+        public void Clear(Color color, float depth = 1)
+        {
+            Clear((Color32)color, depth);
+        }
+
+        public void Clear(Color32 color, float depth = 1)
         {
             var span = new Span<Color32>(data);
             span.Fill(color);
+
+            if (depthBuffer != null)
+            {
+                var spanZ = new Span<float>(depthBuffer);
+                spanZ.Fill(depth);
+            }
+        }
+
+        public void Clear(float depth = 1)
+        {
+            var spanZ = new Span<float>(depthBuffer);
+            spanZ.Fill(depth);
         }
 
         public void DrawRect(Rect rect, Color32 color)
@@ -212,14 +230,14 @@ namespace SoftRender.Engine
             DrawTriangleScanline(p1, p2, p3, color);
         }
 
-        public void DrawTriangle(FatVertex p1, FatVertex p2, FatVertex p3)
+        public void DrawTriangle(FatVertex p1, FatVertex p2, FatVertex p3, Material material)
         {
             // Do the near/far culling - for now just eliminate triangles completely
             if (p1.position.w <= 0) return;
             if (p2.position.w <= 0) return;
             if (p3.position.w <= 0) return;
 
-            DrawTriangleScanline(p1, p2, p3);
+            DrawTriangleScanline(p1, p2, p3, material);
         }
 
         public void DrawTriangleScanline(Vector2 p1, Vector2 p2, Vector2 p3, Color32 color)
@@ -348,9 +366,10 @@ namespace SoftRender.Engine
                 maxX = maxX + incMaxX;
             }
         }
-        public void DrawTriangleScanline(FatVertex p1, FatVertex p2, FatVertex p3)
+        public void DrawTriangleScanline(FatVertex p1, FatVertex p2, FatVertex p3, Material material)
         {
             Vector2[]   p = new Vector2[] { Vector2.FloorToInt(p1.position.xy), Vector2.FloorToInt(p2.position.xy), Vector2.FloorToInt(p3.position.xy) };
+            float[]     z = new float[] { p1.position.z, p2.position.z, p3.position.z };
             Color[]     c = new Color[] { p1.color, p2.color, p3.color };
 
             // Find smallest Y
@@ -401,14 +420,18 @@ namespace SoftRender.Engine
 
             float minX, maxX;
             Color minC, maxC;
+            float minZ, maxZ;
 
             minX = maxX = p[minIndexY].x;
             minC = maxC = c[minIndexY];
+            minZ = maxZ = z[minIndexY];
 
             float incMinX = (p[minIndexX].x - minX) / (p[minIndexX].y - p[minIndexY].y);
             float incMaxX = (p[maxIndexX].x - maxX) / (p[maxIndexX].y - p[minIndexY].y);
             Color incMinC = (c[minIndexX] - minC) / (p[minIndexX].y - p[minIndexY].y);
             Color incMaxC = (c[maxIndexX] - maxC) / (p[maxIndexX].y - p[minIndexY].y);
+            float incMinZ = (z[minIndexX] - minZ) / (p[minIndexX].y - p[minIndexY].y);
+            float incMaxZ = (z[maxIndexX] - maxZ) / (p[maxIndexX].y - p[minIndexY].y);
 
             bool earlyOut = false;
             if (y2 > height) { y2 = height - 1; earlyOut = true; }
@@ -419,27 +442,33 @@ namespace SoftRender.Engine
                 earlyOut = true;
                 midIndexY = maxIndexX;
                 y2 = (int)Mathf.Min(p[midIndexY].y + 1, height - 1);
-                if (p[minIndexY].x < p[minIndexX].x) { minX = p[minIndexY].x; maxX = p[minIndexX].x; minC = c[minIndexY]; maxC = c[minIndexX]; }
-                else { minX = p[minIndexX].x; maxX = p[minIndexY].x; minC = c[minIndexX]; maxC = c[minIndexX]; }
+                if (p[minIndexY].x < p[minIndexX].x) { minX = p[minIndexY].x; maxX = p[minIndexX].x; minC = c[minIndexY]; maxC = c[minIndexX]; minZ = z[minIndexY]; maxZ = z[minIndexX]; }
+                else { minX = p[minIndexX].x; maxX = p[minIndexY].x; minC = c[minIndexX]; maxC = c[minIndexX]; minZ = z[minIndexX]; maxZ = z[minIndexX]; }
 
                 incMinX = (p[midIndexY].x - minX) / (p[midIndexY].y - p[minIndexY].y);
                 incMaxX = (p[midIndexY].x - maxX) / (p[midIndexY].y - p[minIndexY].y);
                 incMinC = (c[midIndexY] - minC) / (p[midIndexY].y - p[minIndexY].y);
                 incMaxC = (c[midIndexY] - maxC) / (p[midIndexY].y - p[minIndexY].y);
+                incMinZ = (z[midIndexY] - minZ) / (p[midIndexY].y - p[minIndexY].y);
+                incMaxZ = (z[midIndexY] - maxZ) / (p[midIndexY].y - p[minIndexY].y);
             }
             else if ((int)p[minIndexY].y == (int)p[maxIndexX].y)
             {
                 earlyOut = true;
                 midIndexY = minIndexX;
                 y2 = (int)Mathf.Min(p[midIndexY].y + 1, height - 1);
-                if (p[minIndexY].x < p[maxIndexX].x) { minX = p[minIndexY].x; maxX = p[maxIndexX].x; minC = c[minIndexY]; maxC = c[maxIndexX]; }
-                else { minX = p[maxIndexX].x; maxX = p[minIndexY].x; minC = c[maxIndexX]; maxC = c[minIndexY]; }
+                if (p[minIndexY].x < p[maxIndexX].x) { minX = p[minIndexY].x; maxX = p[maxIndexX].x; minC = c[minIndexY]; maxC = c[maxIndexX]; minZ = z[minIndexY]; maxZ = z[maxIndexX]; }
+                else { minX = p[maxIndexX].x; maxX = p[minIndexY].x; minC = c[maxIndexX]; maxC = c[minIndexY]; minZ = z[maxIndexX]; maxZ = z[minIndexY]; }
 
                 incMinX = (p[midIndexY].x - minX) / (p[midIndexY].y - p[minIndexY].y);
                 incMaxX = (p[midIndexY].x - maxX) / (p[midIndexY].y - p[minIndexY].y);
                 incMinC = (c[midIndexY] - minC) / (p[midIndexY].y - p[minIndexY].y);
                 incMaxC = (c[midIndexY] - maxC) / (p[midIndexY].y - p[minIndexY].y);
+                incMinZ = (z[midIndexY] - minZ) / (p[midIndexY].y - p[minIndexY].y);
+                incMaxZ = (z[midIndexY] - maxZ) / (p[midIndexY].y - p[minIndexY].y);
             }
+
+            var df = material.GetDepthFunction();
 
             for (int y = y1; y < y2; y++)
             {
@@ -453,16 +482,35 @@ namespace SoftRender.Engine
                     m1 = (m1 > 0) ? (m1) : (0);
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
+                    int     deltaX = m2 - m1;
+                    float   targetZ, incZ;
+                    Color   targetC, incC;
+
+                    if (deltaX == 0) { targetZ = minZ; targetC = minC; incZ = 0; incC = Color.black; }
+                    else
+                    {
+                        targetZ = Mathf.Lerp(minZ, maxZ, (m1 - minX) / deltaX); 
+                        incZ = (maxZ - minZ) / deltaX;
+                        targetC = Color.Lerp(minC, maxC, (m1 - minX) / deltaX); 
+                        incC = (maxC - minC) / deltaX;
+                    }
+
                     int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
                     {
-                        data[idx] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        if (df(depthBuffer[idx], targetZ))
+                        {
+                            data[idx] = (Color32)targetC;
+                            depthBuffer[idx] = targetZ; 
+                        }
+                        targetZ = targetZ + incZ;
+                        targetC = targetC + incC;
                         idx++;
                     }
                 }
 
-                minX = minX + incMinX; minC = minC + incMinC;
-                maxX = maxX + incMaxX; maxC = maxC + incMaxC;
+                minX = minX + incMinX; minC = minC + incMinC; minZ = minZ + incMinZ;
+                maxX = maxX + incMaxX; maxC = maxC + incMaxC; maxZ = maxZ + incMaxZ;
             }
 
             // Out of the bottom of the screen, no point in more calculations
@@ -472,11 +520,13 @@ namespace SoftRender.Engine
             {
                 incMinX = (p[maxIndexX].x - minX) / (y3 - y2);
                 incMinC = (c[maxIndexX] - minC) / (y3 - y2);
+                incMinZ = (z[maxIndexX] - minZ) / (y3 - y2);
             }
             else
             {
                 incMaxX = (p[minIndexX].x - maxX) / (y3 - y2);
                 incMaxC = (c[minIndexX] - maxC) / (y3 - y2);
+                incMaxZ = (z[minIndexX] - maxZ) / (y3 - y2);
             }
 
             if (y3 >= height) y3 = height - 1;
@@ -493,16 +543,35 @@ namespace SoftRender.Engine
                     m1 = (m1 > 0) ? (m1) : (0);
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
+                    int     deltaX = m2 - m1;
+                    float   targetZ, incZ;
+                    Color   targetC, incC;
+
+                    if (deltaX == 0) { targetZ = minZ; targetC = minC; incZ = 0; incC = Color.black; }
+                    else
+                    {
+                        targetZ = Mathf.Lerp(minZ, maxZ, (m1 - minX) / deltaX);
+                        incZ = (maxZ - minZ) / deltaX;
+                        targetC = Color.Lerp(minC, maxC, (m1 - minX) / deltaX);
+                        incC = (maxC - minC) / deltaX;
+                    }
+
                     int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
                     {
-                        data[idx] = (Color32)Color.Lerp(minC, maxC, (x - minX) / (maxX - minX));
+                        if (df(depthBuffer[idx], targetZ))
+                        {
+                            data[idx] = (Color32)targetC;
+                            depthBuffer[idx] = targetZ;
+                        }
+                        targetZ = targetZ + incZ;
+                        targetC = targetC + incC;
                         idx++;
                     }
                 }
 
-                minX = minX + incMinX; minC = minC + incMinC;
-                maxX = maxX + incMaxX; maxC = maxC + incMaxC;
+                minX = minX + incMinX; minC = minC + incMinC; minZ = minZ + incMinZ;
+                maxX = maxX + incMaxX; maxC = maxC + incMaxC; maxZ = maxZ + incMaxZ;
             }
         }
 

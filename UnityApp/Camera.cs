@@ -85,9 +85,10 @@ namespace SoftRender.UnityApp
             switch (clearFlags)
             {
                 case CameraClearFlags.SolidColor:
-                    Application.currentScreen.Clear(backgroundColor);
+                    Application.currentScreen.Clear(backgroundColor, float.MaxValue);
                     break;
                 case CameraClearFlags.Depth:
+                    Application.currentScreen.Clear(float.MaxValue);
                     break;
                 case CameraClearFlags.Nothing:
                     break;

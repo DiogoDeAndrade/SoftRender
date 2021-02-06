@@ -15,6 +15,8 @@ namespace SoftRender.Engine
         protected Bitmap    screen;
 
         protected Color     clearColor;
+        protected bool      enableDepthBuffer;
+        protected float     clearDepth;
         protected int       windowResX, windowResY;
         public    float     resScale;
         protected string    name;
@@ -35,6 +37,8 @@ namespace SoftRender.Engine
             renderer = IntPtr.Zero;
             resScale = 1.0f;
             clearColor = new Color(1.0f, 0.0f, 1.0f, 1.0f);
+            enableDepthBuffer = false;
+            clearDepth = 1.0f;
             writeFPS = false;
             // Check if font exists
             if (System.IO.File.Exists("font.png"))
@@ -152,6 +156,7 @@ namespace SoftRender.Engine
 
             primarySurface = new Bitmap(windowResX, windowResY);
             screen = new Bitmap(resX, resY);
+            if (enableDepthBuffer) screen.AttachDepthBuffer();
 
             return true;
         }

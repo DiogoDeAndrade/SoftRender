@@ -229,7 +229,8 @@ namespace SoftRender.UnityApp
                         {
                             Application.currentScreen.DrawTriangle(vertexStream[_triangles[i]],
                                                                    vertexStream[_triangles[i + 1]],
-                                                                   vertexStream[_triangles[i + 2]]);
+                                                                   vertexStream[_triangles[i + 2]],
+                                                                   material);
                         }
                     }
                 }

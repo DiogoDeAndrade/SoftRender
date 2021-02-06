@@ -9,6 +9,7 @@ namespace SoftRender.Samples.UnityApp.PerspectiveRender
         public PerspectiveRender()
         {
             name = "Perspective Render Sample - Unity Framework";
+            enableDepthBuffer = true;
         }
 
         protected override bool Initialize()

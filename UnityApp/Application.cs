@@ -38,8 +38,6 @@ namespace SoftRender.UnityApp
         {
             if (!base.Startup()) return false;
 
-            SDL2.SDL.SDL_SetRelativeMouseMode(SDL2.SDL.SDL_bool.SDL_TRUE);
-
             return true;
         }
 
