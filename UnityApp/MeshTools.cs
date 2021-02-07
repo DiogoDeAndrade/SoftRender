@@ -357,7 +357,7 @@ namespace SoftRender.UnityApp
             mesh.SetUV(uv);
         }
 
-        public static void CopyNormalsToColor0(Mesh mesh)
+        public static void CopyNormalsToColor0(Mesh mesh, bool useAlpha = false, float alpha = 1.0f)
         {
             var normals = mesh.GetNormals();
             var color = new Color[normals.Length];
@@ -365,6 +365,13 @@ namespace SoftRender.UnityApp
             for (int i = 0; i < normals.Length; i++)
             {
                 color[i] = (Color)(normals[i] * 0.5f + 0.5f);
+            }
+            if (useAlpha)
+            {
+                for (int i = 0; i < normals.Length; i++)
+                {
+                    color[i].a = alpha;
+                }
             }
 
             mesh.colors0 = color;

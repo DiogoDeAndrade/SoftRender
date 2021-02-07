@@ -491,7 +491,8 @@ namespace SoftRender.Engine
                 incMaxZ = (z[midIndexY] - maxZ) / (p[midIndexY].y - p[minIndexY].y);
             }
 
-            var df = material.GetDepthFunction();
+            var depthTestAndSet = material.GetTestAndSetDepthFunction();
+            var blendFunction = material.GetBlendFunction();
 
             for (int y = y1; y < y2; y++)
             {
@@ -537,10 +538,9 @@ namespace SoftRender.Engine
                     int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
                     {
-                        if (df(depthBuffer[idx], targetZ))
+                        if (depthTestAndSet(ref depthBuffer, idx, targetZ))
                         {
-                            data[idx] = (Color32)targetC;
-                            depthBuffer[idx] = targetZ;
+                            data[idx] = blendFunction((Color32)targetC, data[idx]);
                         }
                         targetZ = targetZ + incZ;
                         targetC = targetC + incC;
@@ -614,10 +614,9 @@ namespace SoftRender.Engine
                     int idx = y * width + m1;
                     for (int x = m1; x <= m2; x++)
                     {
-                        if (df(depthBuffer[idx], targetZ))
+                        if (depthTestAndSet(ref depthBuffer, idx, targetZ))
                         {
-                            data[idx] = (Color32)targetC;
-                            depthBuffer[idx] = targetZ;
+                            data[idx] = blendFunction((Color32)targetC, data[idx]);
                         }
                         targetZ = targetZ + incZ;
                         targetC = targetC + incC;
@@ -678,7 +677,8 @@ namespace SoftRender.Engine
             Vector2 edge2 = p1.position.xy - p0.position.xy;
             float   area = Triangle.GetArea2x(p0.position.xy, p1.position.xy, p2.position.xy);
 
-            var df = material.GetDepthFunction();
+            var depthTestAndSet = material.GetTestAndSetDepthFunction();
+            var blendFunction = material.GetBlendFunction();
 
             // On all pixels of the bounding rectangle
             Parallel.For(y1, y2 + 1, (y) =>
@@ -707,10 +707,9 @@ namespace SoftRender.Engine
 
                         current.Interpolate(p0, edge10, edge20, e1, e2);
 
-                        if (df(depthBuffer[idx], current.position.z))
+                        if (depthTestAndSet(ref depthBuffer, idx, current.position.z))
                         {
-                            data[idx] = (Color32)current.color;
-                            depthBuffer[idx] = current.position.z;
+                            data[idx] = blendFunction((Color32)current.color, data[idx]);
                         }
                     }
                 }

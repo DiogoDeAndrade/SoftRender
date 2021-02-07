@@ -36,10 +36,8 @@ namespace SoftRender.Engine
             return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
         }
 
-        public float magnitude
-        {
-            get { return Mathf.Sqrt(x * x + y * y + z * z); }
-        }
+        public float magnitude => Mathf.Sqrt(x * x + y * y + z * z);
+        public float magnitudeSquared => x * x + y * y + z * z; 
 
         public Vector3 normalized
         {
@@ -58,6 +56,9 @@ namespace SoftRender.Engine
         {
             return new Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
         }
+
+        static public float Distance(Vector3 a, Vector3 b) => (b - a).magnitude;
+        static public float SqrDistance(Vector3 a, Vector3 b) => (b - a).magnitudeSquared;
 
         public Vector2 xy { get => new Vector2(x, y); set => (x, y) = (value.x, value.y); }
         public Vector2 xz { get => new Vector2(x, z); set => (x, z) = (value.x, value.y); }

@@ -62,6 +62,16 @@ namespace SoftRender.Engine
             return c1 + (c2 - c1) * t;
         }
 
+        public static Color Min(Color c1, Color c2)
+        {
+            return new Color(Mathf.Min(c1.r, c2.r), Mathf.Min(c1.g, c2.g), Mathf.Min(c1.b, c2.b), Mathf.Min(c1.a, c2.a));
+        }
+
+        public static Color Max(Color c1, Color c2)
+        {
+            return new Color(Mathf.Max(c1.r, c2.r), Mathf.Max(c1.g, c2.g), Mathf.Max(c1.b, c2.b), Mathf.Max(c1.a, c2.a));
+        }
+
         public static Color black = new Color(0, 0, 0, 1);
         public static Color white = new Color(1, 1, 1, 1);
         public static Color grey = new Color(0.5f, 0.5f, 0.5f, 1);

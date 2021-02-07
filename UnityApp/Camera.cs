@@ -17,6 +17,7 @@ namespace SoftRender.UnityApp
         public float            farClipPlane = 1000.0f;
         public float            fieldOfView = 60.0f;
         public bool             pixelPerfect = false;
+        public bool             sortObjects = true;
 
         int viewportWidth { get { return Application.current.resX; } }
         int viewportHeight { get { return Application.current.resY; } }
@@ -97,6 +98,9 @@ namespace SoftRender.UnityApp
             }
 
             var clipMatrix = GetClipMatrix();
+            var cameraPos = transform.position;
+
+            renderables.Sort((r1, r2) => Vector3.Distance(cameraPos, r1.transform.position).CompareTo(Vector3.Distance(cameraPos, r2.transform.position)));
 
             foreach (var renderable in renderables)
             {

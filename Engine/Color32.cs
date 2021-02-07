@@ -39,6 +39,37 @@ namespace SoftRender.Engine
             return $"({r},{g},{b},{a})";
         }
 
+        static public Color32 AddClamped(Color32 a, Color32 b)
+        {
+            return new Color32
+            {
+                r = (byte)Mathf.Clamp(((int)a.r + (int)b.r), 0, 255),
+                g = (byte)Mathf.Clamp(((int)a.g + (int)b.g), 0, 255),
+                b = (byte)Mathf.Clamp(((int)a.b + (int)b.b), 0, 255),
+                a = (byte)Mathf.Clamp(((int)a.a + (int)b.a), 0, 255)
+            };
+        }
+
+        static public Color32 SubClamped(Color32 a, Color32 b)
+        {
+            return new Color32
+            {
+                r = (byte)Mathf.Clamp(((int)a.r - (int)b.r), 0, 255),
+                g = (byte)Mathf.Clamp(((int)a.g - (int)b.g), 0, 255),
+                b = (byte)Mathf.Clamp(((int)a.b - (int)b.b), 0, 255),
+                a = (byte)Mathf.Clamp(((int)a.a - (int)b.a), 0, 255)
+            };
+        }
+        public static Color32 Min(Color32 c1, Color32 c2)
+        {
+            return new Color32(Mathf.Min(c1.r, c2.r), Mathf.Min(c1.g, c2.g), Mathf.Min(c1.b, c2.b), Mathf.Min(c1.a, c2.a));
+        }
+
+        public static Color32 Max(Color32 c1, Color32 c2)
+        {
+            return new Color32(Mathf.Max(c1.r, c2.r), Mathf.Max(c1.g, c2.g), Mathf.Max(c1.b, c2.b), Mathf.Max(c1.a, c2.a));
+        }
+
         public static Color32 Lerp(Color32 c1, Color32 c2, float t)
         {
             float tt = t / 255.0f;

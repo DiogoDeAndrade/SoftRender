@@ -20,6 +20,8 @@ namespace SoftRender.Engine
         public static float Clamp(float v, float a, float b) => (v < a) ? (a) : ((v > b) ? (b) : (v));
         public static float Clamp01(float v) => (v < 0) ? (0) : ((v > 1) ? (1) : (v));
         public static float Abs(float v) => MathF.Abs(v);
+        public static byte Min(byte a, byte b) => (a < b) ? (a) : (b);
+        public static byte Max(byte a, byte b) => (a > b) ? (a) : (b);
         public static float Min(float a, float b) => MathF.Min(a, b);
         public static float Max(float a, float b) => MathF.Max(a, b);
         public static float Sqrt(float v) => MathF.Sqrt(v);
