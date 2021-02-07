@@ -25,11 +25,13 @@ namespace SoftRender.Engine
         public static float Sqrt(float v) => MathF.Sqrt(v);
         public static float Floor(float v) => MathF.Floor(v);
         public static int FloorToInt(float v) => (int)MathF.Floor(v);
+        public static int CeilToInt(float v) => (int)MathF.Ceiling(v);
         public static float Round(float v) => MathF.Round(v);
         public static float Atan2(float y, float x) => MathF.Atan2(y, x);
         public static float CopySign(float x, float y) => MathF.CopySign(x, y);
 
         public static float Lerp(float v1, float v2, float t) => v1 + (v2 - v1) * t;
+
         // Perlin noise implementation (taken from Unity: https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/TreeEditor/Includes/Perlin.cs)
         public static float Perlin(Vector2 p) => Perlin(p.x, p.y);
         public static float Perlin(float x, float y)

@@ -32,7 +32,8 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             };
             meshFilter.mesh = mesh;
 
-            meshObject = new GameObject("Object");
+            // Wireframe object
+            /*meshObject = new GameObject("Object");
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshRenderer.material = new Material

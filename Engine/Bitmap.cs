@@ -9,6 +9,18 @@ namespace SoftRender.Engine
     {
         public Vector4  position;
         public Color    color;
+
+        public void Interpolate(FatVertex v0, FatVertex edge0, FatVertex edge1, float w1, float w2)
+        {
+            position = v0.position + edge0.position * w1 + edge1.position * w2;
+            color = v0.color + edge0.color * w1 + edge1.color * w2;
+        }
+
+        public static FatVertex operator -(FatVertex v1, FatVertex v2) => new FatVertex()
+        {
+            position = v1.position - v2.position,
+            color = v1.color - v2.color
+        };
     };
 
     public class Bitmap
@@ -238,7 +250,7 @@ namespace SoftRender.Engine
             if (p2.position.w <= 0) return;
             if (p3.position.w <= 0) return;
 
-            DrawTriangleScanline(p1, p2, p3, material);
+            DrawTriangleEdgeFunction(p1, p2, p3, material);
         }
 
         public void DrawTriangleScanline(Vector2 p1, Vector2 p2, Vector2 p3, Color32 color)
@@ -605,6 +617,92 @@ namespace SoftRender.Engine
 
                 minX = minX + incMinX; minC = minC + incMinC; minZ = minZ + incMinZ;
                 maxX = maxX + incMaxX; maxC = maxC + incMaxC; maxZ = maxZ + incMaxZ;
+            }
+        }
+
+        delegate bool EdgeFunctionValidation(float e1, float e2, float e3);
+
+        public void DrawTriangleEdgeFunction(FatVertex p0, FatVertex p1, FatVertex p2, Material material)
+        {
+            // Create edge function validation function
+            EdgeFunctionValidation edgeFunctionValidation;
+            switch (material.cullMode)
+            {
+                case CullMode.Front:
+                    edgeFunctionValidation = (e1, e2, e3) => (e1 >= 0) && (e2 >= 0) && (e3 >= 0);
+                    break;
+                case CullMode.Back:
+                    edgeFunctionValidation = (e1, e2, e3) => (e1 <= 0) && (e2 <= 0) && (e3 <= 0);
+                    break;
+                case CullMode.Off:
+                default:
+                    edgeFunctionValidation = (e1, e2, e3) => ((e1 <= 0) && (e2 <= 0) && (e3 <= 0)) || ((e1 >= 0) && (e2 >= 0) && (e3 >= 0));
+                    break;
+            }
+
+            // Get bounding box of triangle
+            Rect r = new Rect(p0.position.xy);
+            r.ExtendTo(p1.position.xy);
+            r.ExtendTo(p2.position.xy);
+
+            int x1 = Mathf.FloorToInt(r.x1);
+            int y1 = Mathf.FloorToInt(r.y1);
+            int x2 = Mathf.CeilToInt(r.x2);
+            int y2 = Mathf.CeilToInt(r.y2);
+
+            // Clip the rectangle to the screen
+            x1 = Mathf.Clamp(x1, 0, width - 1);
+            y1 = Mathf.Clamp(y1, 0, height - 1);
+            x2 = Mathf.Clamp(x2, 0, width - 1);
+            y2 = Mathf.Clamp(y2, 0, height - 1);
+
+            if (x1 == x2) return;
+            if (y1 == y2) return;
+
+            // Setup auxiliary variables
+            FatVertex edge10 = p1 - p0;
+            FatVertex edge20 = p2 - p0;
+            FatVertex current = new FatVertex();
+
+            Vector2 edge0 = p2.position.xy - p1.position.xy;
+            Vector2 edge1 = p0.position.xy - p2.position.xy;
+            Vector2 edge2 = p1.position.xy - p0.position.xy;
+            float   area = Triangle.GetArea2x(p0.position.xy, p1.position.xy, p2.position.xy);
+
+            var df = material.GetDepthFunction();
+
+            // On all pixels of the bounding rectangle
+            for (int y = y1; y <= y2; y++)
+            {
+                // Compute partials for the edge function
+                float e0y = (y - p2.position.y) * edge0.x;
+                float e1y = (y - p0.position.y) * edge1.x;
+                float e2y = (y - p1.position.y) * edge2.x;
+
+                int idx = y * width + x1;
+                for (int x = x1; x <= x2; x++)
+                {
+                    // Compute the barycentric coordinates
+                    float e0 = (x - p2.position.x) * edge0.y - e0y;
+                    float e1 = (x - p0.position.x) * edge1.y - e1y;
+                    float e2 = (x - p1.position.x) * edge2.y - e2y;
+
+                    if (edgeFunctionValidation(e0, e1, e2))
+                    {
+                        // Finish the barycentric coordinates (normalization)
+                        e0 /= area; e1 /= area; e2 /= area;
+
+                        current.Interpolate(p0, edge10, edge20, e1, e2);
+
+                        if (df(depthBuffer[idx], current.position.z))
+                        {
+                            data[idx] = (Color32)current.color;
+                            depthBuffer[idx] = current.position.z;
+                        }                        
+                    }
+
+                    idx++;
+                }
             }
         }
 
