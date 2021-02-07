@@ -16,6 +16,16 @@ namespace SoftRender.Engine
             color = v0.color + edge0.color * w1 + edge1.color * w2;
         }
 
+        static public FatVertex NewFromInterpolation(FatVertex v0, FatVertex edge0, FatVertex edge1, float w1, float w2)
+        {
+            return new FatVertex
+            {
+                position = v0.position + edge0.position * w1 + edge1.position * w2,
+                color = v0.color + edge0.color * w1 + edge1.color * w2
+
+            };
+        }
+
         public static FatVertex operator -(FatVertex v1, FatVertex v2) => new FatVertex()
         {
             position = v1.position - v2.position,
@@ -662,7 +672,6 @@ namespace SoftRender.Engine
             // Setup auxiliary variables
             FatVertex edge10 = p1 - p0;
             FatVertex edge20 = p2 - p0;
-            FatVertex current = new FatVertex();
 
             Vector2 edge0 = p2.position.xy - p1.position.xy;
             Vector2 edge1 = p0.position.xy - p2.position.xy;
@@ -672,16 +681,20 @@ namespace SoftRender.Engine
             var df = material.GetDepthFunction();
 
             // On all pixels of the bounding rectangle
-            for (int y = y1; y <= y2; y++)
+            Parallel.For(y1, y2 + 1, (y) =>
             {
+                FatVertex current = new FatVertex();
+
                 // Compute partials for the edge function
                 float e0y = (y - p2.position.y) * edge0.x;
                 float e1y = (y - p0.position.y) * edge1.x;
                 float e2y = (y - p1.position.y) * edge2.x;
 
-                int idx = y * width + x1;
+                int baseIdx = y * width;
                 for (int x = x1; x <= x2; x++)
                 {
+                    int idx = baseIdx + x;
+
                     // Compute the barycentric coordinates
                     float e0 = (x - p2.position.x) * edge0.y - e0y;
                     float e1 = (x - p0.position.x) * edge1.y - e1y;
@@ -698,12 +711,10 @@ namespace SoftRender.Engine
                         {
                             data[idx] = (Color32)current.color;
                             depthBuffer[idx] = current.position.z;
-                        }                        
+                        }
                     }
-
-                    idx++;
                 }
-            }
+            });
         }
 
         bool Load(string filename)
