@@ -476,24 +476,40 @@ namespace SoftRender.Engine
                 if (y >= 0)
                 {
                     // Fill span
-                    int m1 = (int)minX;
-                    int m2 = (int)maxX;
-                    if (m1 > m2) (m1, m2) = (m2, m1);
+                    int startX = (int)minX;
+                    Color startC = minC;
+                    float startZ = minZ;
+                    int endX = (int)maxX;
+                    Color endC = maxC;
+                    float endZ = maxZ;
 
-                    m1 = (m1 > 0) ? (m1) : (0);
+                    if (startX > endX)
+                    {
+                        (startX, endX) = (endX, startX);
+                        (startC, endC) = (endC, startC);
+                        (startZ, endZ) = (endZ, startZ);
+                    }
+
+                    int m1 = startX;
+                    int m2 = endX;
+
+                    m1 = Mathf.Clamp(m1, 0, width - 1);
+                    m2 = Mathf.Clamp(m2, 0, width - 1);
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
-                    int     deltaX = m2 - m1;
-                    float   targetZ, incZ;
-                    Color   targetC, incC;
+                    int deltaX = m2 - m1;
+                    float targetZ, incZ;
+                    Color targetC, incC;
 
-                    if (deltaX == 0) { targetZ = minZ; targetC = minC; incZ = 0; incC = Color.black; }
+                    if (deltaX == 0) { targetZ = startZ; targetC = startC; incZ = 0; incC = Color.black; }
                     else
                     {
-                        targetZ = Mathf.Lerp(minZ, maxZ, (m1 - minX) / deltaX); 
-                        incZ = (maxZ - minZ) / deltaX;
-                        targetC = Color.Lerp(minC, maxC, (m1 - minX) / deltaX); 
-                        incC = (maxC - minC) / deltaX;
+                        deltaX = (endX - startX);
+                        float t = (m1 - startX) / deltaX;
+                        targetZ = Mathf.Lerp(startZ, endZ, t);
+                        incZ = (endZ - startZ) / deltaX;
+                        targetC = Color.Lerp(startC, endC, t);
+                        incC = (endC - startC) / deltaX;
                     }
 
                     int idx = y * width + m1;
@@ -502,7 +518,7 @@ namespace SoftRender.Engine
                         if (df(depthBuffer[idx], targetZ))
                         {
                             data[idx] = (Color32)targetC;
-                            depthBuffer[idx] = targetZ; 
+                            depthBuffer[idx] = targetZ;
                         }
                         targetZ = targetZ + incZ;
                         targetC = targetC + incC;
@@ -537,24 +553,40 @@ namespace SoftRender.Engine
                 if (y >= 0)
                 {
                     // Fill span
-                    int m1 = (int)minX;
-                    int m2 = (int)maxX;
-                    if (m1 > m2) (m1, m2) = (m2, m1);
+                    int     startX = (int)minX;
+                    Color   startC = minC;
+                    float   startZ = minZ;
+                    int     endX = (int)maxX;
+                    Color   endC = maxC;
+                    float   endZ = maxZ;
 
-                    m1 = (m1 > 0) ? (m1) : (0);
+                    if (startX > endX)
+                    {
+                        (startX, endX) = (endX, startX);
+                        (startC, endC) = (endC, startC);
+                        (startZ, endZ) = (endZ, startZ);
+                    }
+
+                    int m1 = startX;
+                    int m2 = endX;
+
+                    m1 = Mathf.Clamp(m1, 0, width - 1);
+                    m2 = Mathf.Clamp(m2, 0, width - 1);
                     m2 = (m2 < width) ? (m2) : (width - 1);
 
                     int     deltaX = m2 - m1;
                     float   targetZ, incZ;
                     Color   targetC, incC;
 
-                    if (deltaX == 0) { targetZ = minZ; targetC = minC; incZ = 0; incC = Color.black; }
+                    if (deltaX == 0) { targetZ = startZ; targetC = startC; incZ = 0; incC = Color.black; }
                     else
                     {
-                        targetZ = Mathf.Lerp(minZ, maxZ, (m1 - minX) / deltaX);
-                        incZ = (maxZ - minZ) / deltaX;
-                        targetC = Color.Lerp(minC, maxC, (m1 - minX) / deltaX);
-                        incC = (maxC - minC) / deltaX;
+                        deltaX = (endX - startX);
+                        float t = (m1 - startX) / deltaX;
+                        targetZ = Mathf.Lerp(startZ, endZ, t);
+                        incZ = (endZ - startZ) / deltaX;
+                        targetC = Color.Lerp(startC, endC, t);
+                        incC = (endC - startC) / deltaX;
                     }
 
                     int idx = y * width + m1;

@@ -17,7 +17,7 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
         {
             if (!base.Initialize()) return false;
 
-            string model = "castle";
+            string model = "ship";
 
             var mesh = Resources.Load<Mesh>(model + ".obj");
             MeshTools.CopyNormalsToColor0(mesh);
@@ -31,6 +31,16 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
                 baseColor = Color.yellow
             };
             meshFilter.mesh = mesh;
+
+            meshObject = new GameObject("Object");
+            meshFilter = meshObject.AddComponent<MeshFilter>();
+            meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = new Material
+            {
+                isWireframe = true,
+                baseColor = Color.black
+            };
+            meshFilter.mesh = mesh;//*/
 
             mainCamera.gameObject.AddComponent<FPCameraMove>();
             mainCamera.transform.position = new Vector3(0.0f, 1.0f, -10.0f);

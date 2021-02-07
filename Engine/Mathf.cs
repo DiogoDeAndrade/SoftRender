@@ -16,6 +16,8 @@ namespace SoftRender.Engine
         public static float Cos(float a) => MathF.Cos(a);
         public static float Tan(float a) => MathF.Tan(a); 
         public static float Asin(float a) => MathF.Asin(a);
+        public static int Clamp(int v, int a, int b) => (v < a) ? (a) : ((v > b) ? (b) : (v));
+        public static float Clamp(float v, float a, float b) => (v < a) ? (a) : ((v > b) ? (b) : (v));
         public static float Clamp01(float v) => (v < 0) ? (0) : ((v > 1) ? (1) : (v));
         public static float Abs(float v) => MathF.Abs(v);
         public static float Min(float a, float b) => MathF.Min(a, b);

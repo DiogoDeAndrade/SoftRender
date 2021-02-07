@@ -39,6 +39,9 @@ namespace SoftRender.Engine
         public static Color operator *(float s, Color v) => new Color(v.r * s, v.g * s, v.b * s, v.a * s);
         public static Color operator /(Color v, float s) => new Color(v.r / s, v.g / s, v.b / s, v.a / s);
 
+        public Color saturated => new Color(Mathf.Clamp01(r), Mathf.Clamp01(g), Mathf.Clamp01(b), Mathf.Clamp01(a));
+        public bool needsHDR => (r < 0) || (r > 1) || (g < 0) || (g > 1) || (b < 0) || (b > 1) || (a < 0) || (a > 1);
+
         public float magnitude
         {
             get { return Mathf.Sqrt(r * r + g * g + b * b + a * a); }
