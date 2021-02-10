@@ -5,6 +5,14 @@ namespace SoftRender.Engine
     {
         public float r, g, b, a;
 
+        public Color(float v)
+        {
+            r = v;
+            g = v;
+            b = v;
+            a = 1;
+        }
+
         public Color(float r, float g, float b, float a = 1.0f)
         {
             this.r = r;

@@ -3,13 +3,15 @@ using SoftRender.UnityApp;
 using SoftRender.Shaders;
 using SoftRender.UnityApp.Defaults;
 
-namespace SoftRender.Samples.UnityApp.ObjLoad
+namespace SoftRender.Samples.UnityApp.PixelLighting
 {
-    class ObjLoad : SoftRender.UnityApp.Application
+    class PixelLighting : SoftRender.UnityApp.Application
     {
-        public ObjLoad()
+        GameObject lightObject;
+
+        public PixelLighting()
         {
-            name = "Object Load Sample - Unity Framework";
+            name = "Pixel Lighting Sample - Unity Framework";
             writeFPS = true;
             enableDepthBuffer = true;
             windowResX = 640;
@@ -23,7 +25,6 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             string model = "ship";
 
             var mesh = Resources.Load<Mesh>(model + ".obj");
-            MeshTools.CopyNormalsToColor0(mesh);
 
             var meshObject = new GameObject("Object");
             var meshFilter = meshObject.AddComponent<MeshFilter>();
@@ -32,7 +33,7 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             {
                 isWireframe = false,
                 baseColor = Color.yellow,
-                shader = new VertexColor()
+                shader = new Shaders.PixeLLighting()
             };
             meshFilter.mesh = mesh;
 
@@ -46,6 +47,13 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             {
                 mainCamera.transform.position = new Vector3(0.0f, 10.0f, -30.0f);
             }
+
+            // Create a light
+            lightObject = new GameObject("Light");
+            lightObject.transform.position = new Vector3(4.0f, 2.0f, 0.0f);
+            lightObject.AddComponent<Light>();
+            var rotationComponent = lightObject.AddComponent<RotateAroundXZ>();
+            rotationComponent.centerPoint = new Vector3(0, 2, 0);
 
             return true;
         }

@@ -3,9 +3,10 @@ using SoftRender.UnityApp;
 
 namespace SoftRender.Shaders
 {
-    public class VertexColor : Shader
+    public class DisplayNormals : Shader
     {
         Matrix4x4 cameraClipMatrix;
+        Matrix4x4 objectWorldMatrix;
         Matrix4x4 objectClipMatrix;
 
         public override FragmentProgram GetFragmentProgram()
@@ -21,18 +22,19 @@ namespace SoftRender.Shaders
         public override void Setup(Material material)
         {
             cameraClipMatrix = Camera.current.GetClipMatrix();
-            objectClipMatrix = Renderer.current.transform.localToWorldMatrix * cameraClipMatrix;
+            objectWorldMatrix = Renderer.current.transform.localToWorldMatrix;
+            objectClipMatrix = objectWorldMatrix * cameraClipMatrix;
         }
 
         private void VertexShader(FatVertex src, ref FatVertex dest)
         {
             dest.position = objectClipMatrix * src.position;
-            dest.color0 = src.color0;
+            dest.normal = (objectWorldMatrix * new Vector4(src.normal, 0)).xyz;
         }
 
         Color PixelShader(FatVertex src)
         {
-            return src.color0;
+            return (Color)(src.normal.normalized * 0.5f + 0.5f);
         }
     }
 }

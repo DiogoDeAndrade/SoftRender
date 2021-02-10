@@ -18,7 +18,6 @@ namespace SoftRender.UnityApp
         Color[]     _colors1;
         Vector2[][] _uv;
         bool        vertex_modified;
-        bool        anythingButPosition;
 
         public Material defaultMaterial;
 
@@ -43,7 +42,6 @@ namespace SoftRender.UnityApp
             {
                 _colors0 = value;
                 vertex_modified = true;
-                anythingButPosition = true;
             }
         }
         public Color[] colors1
@@ -53,7 +51,6 @@ namespace SoftRender.UnityApp
             {
                 _colors1 = value;
                 vertex_modified = true;
-                anythingButPosition = true;
             }
         }
 
@@ -64,7 +61,6 @@ namespace SoftRender.UnityApp
         {
             defaultMaterial = null;
             vertex_modified = true;
-            anythingButPosition = false;
             _uv = new Vector2[2][];
         }
 
@@ -77,7 +73,6 @@ namespace SoftRender.UnityApp
             _uv = new Vector2[2][];
             _triangles = null;
             vertex_modified = true;
-            anythingButPosition = true;
         }
 
         public int GetNumVertices() => (_vertices != null)?(_vertices.Length):(0);
@@ -283,29 +278,16 @@ namespace SoftRender.UnityApp
             }
             else
             {
-                if (anythingButPosition)
-                {
-                    var shouldCull = material.GetCullFunction();
+                var shouldCull = material.GetCullFunction();
 
-                    for (int i = 0; i < _triangles.Length; i+=3)
-                    {
-                        if (!shouldCull(vertexStream[_triangles[i]], vertexStream[_triangles[i + 1]], vertexStream[_triangles[i + 2]]))
-                        {
-                            Application.currentScreen.DrawTriangle(vertexStream[_triangles[i]],
-                                                                    vertexStream[_triangles[i + 1]],
-                                                                    vertexStream[_triangles[i + 2]],
-                                                                    material);
-                        }
-                    }
-                }
-                else
+                for (int i = 0; i < _triangles.Length; i+=3)
                 {
-                    for (int i = 0; i < _triangles.Length; i = i + 3)
+                    if (!shouldCull(vertexStream[_triangles[i]], vertexStream[_triangles[i + 1]], vertexStream[_triangles[i + 2]]))
                     {
-                        Application.currentScreen.DrawTriangle(vertexStream[_triangles[i]].position.xy,
-                                                               vertexStream[_triangles[i + 1]].position.xy,
-                                                               vertexStream[_triangles[i + 2]].position.xy,
-                                                               material.baseColor);
+                        Application.currentScreen.DrawTriangle(vertexStream[_triangles[i]],
+                                                                vertexStream[_triangles[i + 1]],
+                                                                vertexStream[_triangles[i + 2]],
+                                                                material);
                     }
                 }
             }
@@ -324,7 +306,6 @@ namespace SoftRender.UnityApp
             mesh._colors1 = _colors1;
             mesh._uv = _uv;
             mesh.vertex_modified = true;
-            mesh.anythingButPosition = anythingButPosition;
 
             return mesh;
         }
