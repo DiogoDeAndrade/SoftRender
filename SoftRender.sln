@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnityApp_ObjLoad", "samples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnityApp_BlendOps", "samples\UnityApp_BlendOps\UnityApp_BlendOps.csproj", "{E502E20D-035E-4DB6-B687-4D696045913D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaders", "Shaders\Shaders.csproj", "{6ADFC121-8007-46F9-8761-8F36555E815F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,6 +283,18 @@ Global
 		{E502E20D-035E-4DB6-B687-4D696045913D}.Release|x64.Build.0 = Release|Any CPU
 		{E502E20D-035E-4DB6-B687-4D696045913D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E502E20D-035E-4DB6-B687-4D696045913D}.Release|x86.Build.0 = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|x64.Build.0 = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Debug|x86.Build.0 = Debug|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|x64.ActiveCfg = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|x64.Build.0 = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|x86.ActiveCfg = Release|Any CPU
+		{6ADFC121-8007-46F9-8761-8F36555E815F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

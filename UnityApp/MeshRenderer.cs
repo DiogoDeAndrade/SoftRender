@@ -6,7 +6,7 @@ namespace SoftRender.UnityApp
     {
         public Material material;
 
-        override public void Render(Matrix4x4 cameraClipMatrix)
+        override public void Render()
         {
             MeshFilter meshFilter = GetComponent<MeshFilter>();
             if (meshFilter == null) return;
@@ -16,9 +16,7 @@ namespace SoftRender.UnityApp
 
             if (material == null) return;
 
-            var objectClipMatrix = transform.localToWorldMatrix * cameraClipMatrix;
-            
-            mesh.Render(objectClipMatrix, material);
+            mesh.Render(material);
         }
     }
 }

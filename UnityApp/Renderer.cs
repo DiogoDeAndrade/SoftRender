@@ -6,6 +6,7 @@ namespace SoftRender.UnityApp
     public abstract class Renderer : Behaviour
     {
         public static List<Renderer>  allRenderables = new List<Renderer>();
+        public static Renderer        current;
 
         public Renderer() : base()
         {
@@ -17,6 +18,6 @@ namespace SoftRender.UnityApp
             allRenderables.Remove(this);
         }
 
-        abstract public void Render(Matrix4x4 clipMatrix);
+        abstract public void Render();
     }
 }

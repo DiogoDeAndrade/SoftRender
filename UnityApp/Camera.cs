@@ -22,6 +22,8 @@ namespace SoftRender.UnityApp
         int viewportWidth { get { return Application.current.resX; } }
         int viewportHeight { get { return Application.current.resY; } }
 
+        public static Camera       current = null;
+
         static List<Camera> cameras = new List<Camera>();
 
         public static List<Camera> allCameras
@@ -60,7 +62,7 @@ namespace SoftRender.UnityApp
             cameras.Remove(this);
         }
 
-        Matrix4x4 GetProjectionMatrix()
+        public Matrix4x4 GetProjectionMatrix()
         {
             if (orthographic)
             {
@@ -72,7 +74,7 @@ namespace SoftRender.UnityApp
             }
         }
 
-        Matrix4x4 GetClipMatrix()
+        public Matrix4x4 GetClipMatrix()
         {
             var proj = GetProjectionMatrix();
             var pos = (pixelPerfect && orthographic) ? (Vector3.Round(gameObject.transform.position)) : (gameObject.transform.position);
@@ -97,15 +99,20 @@ namespace SoftRender.UnityApp
                     break;
             }
 
-            var clipMatrix = GetClipMatrix();
+            current = this;
+
             var cameraPos = transform.position;
 
             renderables.Sort((r1, r2) => Vector3.Distance(cameraPos, r1.transform.position).CompareTo(Vector3.Distance(cameraPos, r2.transform.position)));
 
             foreach (var renderable in renderables)
             {
-                renderable.Render(clipMatrix);
+                Renderer.current = renderable;
+                renderable.Render();
             }
+
+            Renderer.current = null;
+            current = null;
         }
     }
 }

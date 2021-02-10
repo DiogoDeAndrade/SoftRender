@@ -1,5 +1,6 @@
 ﻿using SoftRender.Engine;
 using SoftRender.UnityApp;
+using SoftRender.Shaders;
 using SoftRender.UnityApp.Defaults;
 
 namespace SoftRender.Samples.UnityApp.ObjLoad
@@ -11,6 +12,8 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             name = "Object Load Sample - Unity Framework";
             writeFPS = true;
             enableDepthBuffer = true;
+            windowResX = 640;
+            windowResY = 480;
         }
 
         protected override bool Initialize()
@@ -28,7 +31,8 @@ namespace SoftRender.Samples.UnityApp.ObjLoad
             meshRenderer.material = new Material
             {
                 isWireframe = false,
-                baseColor = Color.yellow
+                baseColor = Color.yellow,
+                shader = new VertexColor()
             };
             meshFilter.mesh = mesh;
 

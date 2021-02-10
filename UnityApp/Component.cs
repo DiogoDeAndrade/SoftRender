@@ -10,7 +10,8 @@ namespace SoftRender.UnityApp
     {
         public GameObject gameObject;
 
-        public Transform  transform { get => gameObject.transform; }
+        public Transform    transform { get => gameObject.transform; }
+        new public string       name { get => gameObject.name; }
 
         public Component() : base("")
         {

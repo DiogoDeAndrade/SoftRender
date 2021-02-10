@@ -1,9 +1,12 @@
-﻿using SoftRender.Engine;
+﻿#define PARALELL_VERTEX_PROGRAM
+
+using SoftRender.Engine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SoftRender.UnityApp
 {
+
     public class Mesh : Resource
     {
         int[]       _triangles;
@@ -54,6 +57,7 @@ namespace SoftRender.UnityApp
             }
         }
 
+        FatVertex[] sourceStream;
         FatVertex[] vertexStream;
 
         public Mesh(string name) : base(name)
@@ -61,7 +65,7 @@ namespace SoftRender.UnityApp
             defaultMaterial = null;
             vertex_modified = true;
             anythingButPosition = false;
-            _uv = new Vector2[8][];
+            _uv = new Vector2[2][];
         }
 
         public void Clear()
@@ -70,7 +74,7 @@ namespace SoftRender.UnityApp
             _normals = null;
             _colors0 = null;
             _colors1 = null;
-            _uv = new Vector2[8][];
+            _uv = new Vector2[2][];
             _triangles = null;
             vertex_modified = true;
             anythingButPosition = true;
@@ -180,24 +184,48 @@ namespace SoftRender.UnityApp
         }
         public int[] GetTriangles() => _triangles;
 
-        public void Render(Matrix4x4 objectClipMatrix, Material material)
+        static Shader defaultShader = null;
+
+        public void Render(Material material)
         {
             if (vertex_modified)
             {
                 // Prepare vertex stream
                 if ((vertexStream == null) || (vertexStream.Length != vertices.Length))
                 {
-                    vertexStream = new FatVertex[vertices.Length];
+                    sourceStream = new FatVertex[_vertices.Length];
+
+                    vertexStream = new FatVertex[_vertices.Length];
                 }
 
-                if (colors0 != null) for (int i = 0; i < vertices.Length; i++) vertexStream[i].color = _colors0[i];
+                if (_vertices != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].position = new Vector4(_vertices[i], 1);
+                if (_normals != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].normal = _normals[i];
+                if (_tangents != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].tangent = _tangents[i];
+                if (_binormals != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].binormal = _binormals[i];
+                if (_colors0 != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].color0 = _colors0[i];
+                if (_colors1 != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].color1 = _colors1[i];
+                if (_uv[0] != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].uv0 = _uv[0][i];
+                if (_uv[1] != null) for (int i = 0; i < vertices.Length; i++) sourceStream[i].uv1 = _uv[1][i];
 
                 vertex_modified = false;
             }
 
-            int w = Application.currentScreen.width >> 1;
-            int h = Application.currentScreen.height >> 1;
+            // Get the shader
+            Shader      shader = material.shader;
+            if (shader == null)
+            {
+                Debug.Log("No shader setup for material " + material.name);
+                return;
+            }
 
+            shader.Setup(material);
+
+            var vertexProgram = shader.GetVertexProgram();
+
+            int halfWidth = Application.currentScreen.width >> 1;
+            int halfHeight = Application.currentScreen.height >> 1;
+
+#if PARALELL_VERTEX_PROGRAM
             const int clusterSize = 1024;
 
             int clusters = vertexStream.Length / clusterSize;
@@ -206,10 +234,11 @@ namespace SoftRender.UnityApp
                 int idx = i * clusterSize;
                 for (int j = 0; j < clusterSize; j++)
                 {
-                    vertexStream[idx].position = objectClipMatrix * new Vector4(_vertices[idx], 1);
-                    vertexStream[idx].position.xyz /= vertexStream[idx].position.w;
-                    vertexStream[idx].position.x = vertexStream[idx].position.x * w + w;
-                    vertexStream[idx].position.y = -vertexStream[idx].position.y * h + h;
+                    vertexProgram(sourceStream[idx], ref vertexStream[idx]);
+                    vertexStream[idx].position.x = (vertexStream[idx].position.x / vertexStream[idx].position.w) * halfWidth + halfWidth;
+                    vertexStream[idx].position.y = (-vertexStream[idx].position.y / vertexStream[idx].position.w) * halfHeight + halfHeight;
+                    vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
+
                     idx++;
                 }
             });
@@ -217,21 +246,23 @@ namespace SoftRender.UnityApp
             // Do the remaining
             for (int idx = clusters * clusterSize; idx < vertexStream.Length; idx++)
             {
-                vertexStream[idx].position = objectClipMatrix * new Vector4(_vertices[idx], 1);
-                vertexStream[idx].position.xyz /= vertexStream[idx].position.w;
-                vertexStream[idx].position.x = vertexStream[idx].position.x * w + w;
-                vertexStream[idx].position.y = -vertexStream[idx].position.y * h + h;
+                vertexProgram(sourceStream[idx], ref vertexStream[idx]);
+                vertexStream[idx].position.x = (vertexStream[idx].position.x / vertexStream[idx].position.w) * halfWidth + halfWidth;
+                vertexStream[idx].position.y = (-vertexStream[idx].position.y / vertexStream[idx].position.w) * halfHeight + halfHeight;
+                vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
             }
 
-            while (!transformStage.IsCompleted) { ; }//*/
+            while (!transformStage.IsCompleted) { ; }
 
-            /*for (int i = 0; i < vertexStream.Length; i++)
+#else
+            for (int i = 0; i < vertexStream.Length; i++)
             {
-                vertexStream[i].position = objectClipMatrix * new Vector4(_vertices[i], 1);
-                vertexStream[i].position.xyz /= vertexStream[i].position.w;
-                vertexStream[i].position.x = vertexStream[i].position.x * w + w;
-                vertexStream[i].position.y = -vertexStream[i].position.y * h + h;
-            }//*/
+                vertexProgram(sourceStream[i], ref vertexStream[i]);
+                vertexStream[i].position.x = (vertexStream[i].position.x / vertexStream[i].position.w) * halfWidth + halfWidth;
+                vertexStream[i].position.y = (-vertexStream[i].position.y / vertexStream[i].position.w) * halfHeight + halfHeight;
+                vertexStream[i].position.z = (vertexStream[i].position.z / vertexStream[i].position.w);
+            }
+#endif
 
             if (material.isWireframe)
             {

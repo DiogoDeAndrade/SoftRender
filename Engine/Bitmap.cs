@@ -7,29 +7,37 @@ namespace SoftRender.Engine
 {
     public struct FatVertex
     {
-        public Vector4  position;
-        public Color    color;
+        public Vector4      position;
+        public Vector3      normal;
+        public Vector3      tangent;
+        public Vector3      binormal;
+        public Color        color0;
+        public Color        color1;
+        public Vector2      uv0;
+        public Vector2      uv1;
 
         public void Interpolate(FatVertex v0, FatVertex edge0, FatVertex edge1, float w1, float w2)
         {
             position = v0.position + edge0.position * w1 + edge1.position * w2;
-            color = v0.color + edge0.color * w1 + edge1.color * w2;
-        }
-
-        static public FatVertex NewFromInterpolation(FatVertex v0, FatVertex edge0, FatVertex edge1, float w1, float w2)
-        {
-            return new FatVertex
-            {
-                position = v0.position + edge0.position * w1 + edge1.position * w2,
-                color = v0.color + edge0.color * w1 + edge1.color * w2
-
-            };
+            normal = v0.normal + edge0.normal * w1 + edge1.normal * w2;
+            tangent = v0.tangent + edge0.tangent * w1 + edge1.tangent * w2;
+            binormal = v0.binormal + edge0.binormal * w1 + edge1.binormal * w2;
+            color0 = v0.color0 + edge0.color0 * w1 + edge1.color0 * w2;
+            color1 = v0.color1 + edge0.color1 * w1 + edge1.color1 * w2;
+            uv0 = v0.uv0 + edge0.uv0 * w1 + edge1.uv0 * w2;
+            uv1 = v0.uv1 + edge0.uv1 * w1 + edge1.uv1 * w2;
         }
 
         public static FatVertex operator -(FatVertex v1, FatVertex v2) => new FatVertex()
         {
             position = v1.position - v2.position,
-            color = v1.color - v2.color
+            normal = v1.normal - v2.normal,
+            tangent = v1.tangent - v2.tangent,
+            binormal = v1.binormal - v2.binormal,
+            color0 = v1.color0 - v2.color0,
+            color1 = v1.color1 - v2.color1,
+            uv0 = v1.uv0 - v2.uv0,
+            uv1 = v1.uv1 - v2.uv1 
         };
     };
 
@@ -393,7 +401,7 @@ namespace SoftRender.Engine
         {
             Vector2[]   p = new Vector2[] { Vector2.FloorToInt(p1.position.xy), Vector2.FloorToInt(p2.position.xy), Vector2.FloorToInt(p3.position.xy) };
             float[]     z = new float[] { p1.position.z, p2.position.z, p3.position.z };
-            Color[]     c = new Color[] { p1.color, p2.color, p3.color };
+            Color[]     c = new Color[] { p1.color0, p2.color0, p3.color0 };
 
             // Find smallest Y
             int minIndexY = 0;
@@ -680,6 +688,8 @@ namespace SoftRender.Engine
             var depthTestAndSet = material.GetTestAndSetDepthFunction();
             var blendFunction = material.GetBlendFunction();
 
+            var fragmentProgram = material.shader.GetFragmentProgram();
+
             // On all pixels of the bounding rectangle
             Parallel.For(y1, y2 + 1, (y) =>
             {
@@ -709,7 +719,8 @@ namespace SoftRender.Engine
 
                         if (depthTestAndSet(ref depthBuffer, idx, current.position.z))
                         {
-                            data[idx] = blendFunction((Color32)current.color, data[idx]);
+                            Color c = fragmentProgram(current);
+                            data[idx] = blendFunction((Color32)c, data[idx]);
                         }
                     }
                 }

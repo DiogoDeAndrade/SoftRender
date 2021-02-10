@@ -30,9 +30,11 @@ namespace SoftRender.Engine
         BlendFactor             _sourceBlend = BlendFactor.SrcAlpha;
         BlendFactor             _destBlend = BlendFactor.OneMinusSrcAlpha;
         BlendOpFunction         _blendOpFunction;
-
+       
         public bool     isWireframe = false;
         public Color    baseColor = Color.magenta;
+        public Shader   shader;
+        public string   name;
 
         public CullMode cullMode
         {
@@ -123,6 +125,7 @@ namespace SoftRender.Engine
             depthTest = ZTest.Less;
             SetDepthFunctions();
             SetBlendFunctions();
+            name = "Unknown";
         }
 
         public CullFunction GetCullFunction() => cullFunction;
