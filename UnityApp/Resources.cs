@@ -108,6 +108,9 @@ namespace SoftRender.UnityApp
                         case "s":
                             // Smooth shading, unused for now, we always use the normals that come with the file
                             break;
+                        case "g":
+                            Debug.Log("Multi-material mesh not supported, but still loaded as a single material mesh...");
+                            break;
                         case "f":
                             // Triangles or quads?
                             int i1 = LoadObj_GetVertex(tokens[1], objVertices, objNormals, objUV, ref meshVertex, ref meshNormal, ref meshUV);
@@ -136,6 +139,7 @@ namespace SoftRender.UnityApp
                             }
                             else
                             {
+                                Debug.Log("N-sided faces not supported (N=" + (tokens.Length - 2) + ")");
                                 // Don't support any other types of primitives
                                 throw new System.NotImplementedException();
                             }

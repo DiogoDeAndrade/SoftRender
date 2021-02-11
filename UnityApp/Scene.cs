@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using SoftRender.Engine;
 
 namespace SoftRender.UnityApp.SceneManagement
 {
     public class Scene : Object
     {
+        public Color ambientLight = Color.black;
+        public float fogStart = 5.0f;
+        public float fogEnd = 20.0f;
+        public Color fogColor = Color.black;
+
         List<GameObject> objects = new List<GameObject>();
 
         public Scene(string name) : base(name)

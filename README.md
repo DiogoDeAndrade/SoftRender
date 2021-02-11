@@ -35,18 +35,20 @@ Art:
 
 * Castle model by [Lotnik][Lotnik], available under the [CC-BY3.0] license.
 * Ship model by [little killy][little killy], available under the [CC-BY3.0] license.
+* Tree model by [Aredon][Aredon]available under the [CC-BY3.0] license.
 
 All the text and documentation (i.e., non-code files) are made available under
 the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
 License][CC BY-NC-SA 4.0].
-https://github.com/flibitijibibo/SDL2-CS
 
 [MPLv2]:https://opensource.org/licenses/MPL-2.0
 [CC BY-NC-SA 4.0]:https://creativecommons.org/licenses/by-nc-sa/4.0/
 [CC-BY3.0]:https://creativecommons.org/licenses/by/3.0/
+[CC0]:https://creativecommons.org/publicdomain/zero/1.0/
 [Ap2]:https://opensource.org/licenses/Apache-2.0
 [SDL2#]:https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE
 [ELee]:https://github.com/flibitijibibo
+[Aredon]:https://opengameart.org/users/aredon
 [ImageSharp]:https://github.com/SixLabors/ImageSharp
 [DAndrade]:https://github.com/DiogoDeAndrade
 [NFachada]:https://github.com/fakenmc

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoftRender.UnityApp.SceneManagement
 {
-    static class SceneManager
+    public static class SceneManager
     {
         static Scene        activeScene = null;
         static List<Scene>  loadedScenes;
