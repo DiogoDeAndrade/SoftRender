@@ -120,6 +120,7 @@ namespace SoftRender.UnityApp
                     Vector3 v = o + new Vector3(x * tri_size, 0, y * tri_size);
                     vertices.Add(v);
                     normals.Add(new Vector3(0, 1, 0));
+                    uvs.Add(uv);
                 }
             }
 

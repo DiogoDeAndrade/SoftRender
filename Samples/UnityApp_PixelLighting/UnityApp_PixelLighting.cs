@@ -33,7 +33,7 @@ namespace SoftRender.Samples.UnityApp.PixelLighting
             {
                 isWireframe = false,
                 baseColor = Color.yellow,
-                shader = new Shaders.PixeLLighting()
+                shader = new Shaders.PixelLighting()
             };
             meshFilter.mesh = mesh;
 

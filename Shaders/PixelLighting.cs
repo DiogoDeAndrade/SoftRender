@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 namespace SoftRender.Shaders
 {
-    public class PixeLLighting : Shader
+    public class PixelLighting : Shader
     {
         Matrix4x4   cameraClipMatrix;
         Matrix4x4   objectWorldMatrix;
         Matrix4x4   objectClipMatrix;
+        Material    material;
         List<Light> lights;
 
         public override FragmentProgram GetFragmentProgram()
@@ -26,6 +27,7 @@ namespace SoftRender.Shaders
             cameraClipMatrix = Camera.current.GetClipMatrix();
             objectWorldMatrix = Renderer.current.transform.localToWorldMatrix;
             objectClipMatrix = objectWorldMatrix * cameraClipMatrix;
+            this.material = material;
             lights = Light.allLights;
         }
 
@@ -46,7 +48,7 @@ namespace SoftRender.Shaders
                 var toLight = light.transform.position - src.tangent;
                 var attenuation = 10 / toLight.magnitudeSquared;
 
-                lighting += Vector3.Dot(toLight.normalized, src.normal.normalized) * light.intensity * light.color * attenuation;
+                lighting += Vector3.Dot(toLight.normalized, src.normal.normalized) * light.intensity * material.baseColor * light.color * attenuation;
             }
 
             return lighting.saturated;

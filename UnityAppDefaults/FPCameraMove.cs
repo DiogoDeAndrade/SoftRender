@@ -5,8 +5,9 @@ namespace SoftRender.UnityApp.Defaults
 {
     public class FPCameraMove : MonoBehaviour
     {
-        public float moveSpeed = 1.0f;
-        public float rotateSpeed = 45.0f;
+        public float    moveSpeed = 1.0f;
+        public float    rotateSpeed = 45.0f;
+        public bool     displayCoords = true;
 
         void Start()
         {
@@ -35,8 +36,11 @@ namespace SoftRender.UnityApp.Defaults
 
         void OnPostRender()
         {
-            Application.Write(0, 10, "Camera Position = " + transform.position, Color.white, Color.black);
-            Application.Write(0, 20, "Camera Rotation = " + transform.rotation.eulerAngles, Color.white, Color.black);
+            if (displayCoords)
+            {
+                Application.Write(0, 10, "Camera Position = " + transform.position, Color.white, Color.black);
+                Application.Write(0, 20, "Camera Rotation = " + transform.rotation.eulerAngles, Color.white, Color.black);
+            }
         }
     }
 }

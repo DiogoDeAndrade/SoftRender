@@ -49,6 +49,14 @@ namespace SoftRender.Engine
             return $"({x:F3},{y:F3},{z:F3})";
         }
 
+        public void Normalize()
+        {
+            float d = magnitude;
+            x /= d;
+            y /= d;
+            z /= d;
+        }
+
         static public Vector3 Round(Vector3 v) => new Vector3(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z));
         static public Vector3 FloorToInt(Vector3 v) => new Vector3(Mathf.FloorToInt(v.x), Mathf.FloorToInt(v.y), Mathf.FloorToInt(v.z));
         static public float Dot(Vector3 a, Vector3 b) => a.x * b.x + a.y * b.y + a.z * b.z;

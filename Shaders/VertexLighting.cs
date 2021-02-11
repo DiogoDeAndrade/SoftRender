@@ -10,6 +10,7 @@ namespace SoftRender.Shaders
         Matrix4x4   objectWorldMatrix;
         Matrix4x4   objectClipMatrix;
         List<Light> lights;
+        Material    material;
 
         public override FragmentProgram GetFragmentProgram()
         {
@@ -26,6 +27,7 @@ namespace SoftRender.Shaders
             cameraClipMatrix = Camera.current.GetClipMatrix();
             objectWorldMatrix = Renderer.current.transform.localToWorldMatrix;
             objectClipMatrix = objectWorldMatrix * cameraClipMatrix;
+            this.material = material;
             lights = Light.allLights;
         }
 
@@ -41,7 +43,7 @@ namespace SoftRender.Shaders
                 var toLight = light.transform.position - worldPos;
                 var attenuation = 10 / toLight.magnitudeSquared;
 
-                lighting += Vector3.Dot(toLight.normalized, dest.normal) * light.intensity * light.color * attenuation;
+                lighting += Vector3.Dot(toLight.normalized, dest.normal) * light.intensity * light.color * material.baseColor * attenuation;
             }
 
             dest.color0 = lighting.saturated;
