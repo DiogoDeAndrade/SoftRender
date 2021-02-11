@@ -34,6 +34,7 @@ namespace SoftRender.Engine
         public bool     isWireframe = false;
         public Color    baseColor = Color.magenta;
         public float    specPower = 0.0001f;
+        public float    specIntensity = 0.0f;
         public Shader   shader;
         public string   name;
 
