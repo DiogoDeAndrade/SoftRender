@@ -28,17 +28,43 @@ namespace SoftRender.Engine
             uv1 = v0.uv1 + edge0.uv1 * w1 + edge1.uv1 * w2;
         }
 
-        public static FatVertex operator -(FatVertex v1, FatVertex v2) => new FatVertex()
+        public void Interpolate(FatVertex v0, FatVertex v1, FatVertex v2, float w0, float w1, float w2)
         {
-            position = v1.position - v2.position,
-            normal = v1.normal - v2.normal,
-            tangent = v1.tangent - v2.tangent,
-            binormal = v1.binormal - v2.binormal,
-            color0 = v1.color0 - v2.color0,
-            color1 = v1.color1 - v2.color1,
-            uv0 = v1.uv0 - v2.uv0,
-            uv1 = v1.uv1 - v2.uv1 
-        };
+            position = v0.position * w0 + v1.position * w1 + v2.position * w2;
+            normal = v0.normal * w0 + v1.normal * w1 + v2.normal * w2;
+            tangent = v0.tangent * w0 + v1.tangent * w1 + v2.tangent * w2;
+            binormal = v0.binormal * w0 + v1.binormal * w1 + v2.binormal * w2;
+            color0 = v0.color0 * w0 + v1.color0 * w1 + v2.color0 * w2;
+            color1 = v0.color1 * w0 + v1.color1 * w1 + v2.color1 * w2;
+            uv0 = v0.uv0 * w0 + v1.uv0 * w1 + v2.uv0 * w2;
+            uv1 = v0.uv1 * w0 + v1.uv1 * w1 + v2.uv1 * w2;
+        }
+
+        public void InterpolatePC(FatVertex v0, FatVertex v1, FatVertex v2, float w0, float w1, float w2)
+        {
+            position = v0.position * w0 + v1.position * w1 + v2.position * w2;
+
+            float invZ = 1 / position.z;
+
+            normal = (v0.normal * w0 + v1.normal * w1 + v2.normal * w2) *invZ; ;
+            tangent = (v0.tangent * w0 + v1.tangent * w1 + v2.tangent * w2) *invZ; ;
+            binormal = (v0.binormal * w0 + v1.binormal * w1 + v2.binormal * w2) *invZ; ;
+            color0 = (v0.color0 * w0 + v1.color0 * w1 + v2.color0 * w2) *invZ; ;
+            color1 = (v0.color1 * w0 + v1.color1 * w1 + v2.color1 * w2) *invZ; ;
+            uv0 = (v0.uv0 * w0 + v1.uv0 * w1 + v2.uv0 * w2) * invZ;
+            uv1 = (v0.uv1 * w0 + v1.uv1 * w1 + v2.uv1 * w2) *invZ; ;
+        }
+
+        public void MultiplyAttributes(float v)
+        {
+            normal *= v;
+            tangent *= v;
+            binormal *= v;
+            color0 *= v;
+            color1 *= v;
+            uv0 *= v;
+            uv1 *= v;
+        }
     };
 
     public class Bitmap
@@ -46,6 +72,11 @@ namespace SoftRender.Engine
         public Color32[]    data;
         public float[]      depthBuffer;
         public int          width, height;
+
+        public Bitmap()
+        {
+            width = height = 0;
+        }
 
         public Bitmap(int width, int height)
         {
@@ -677,9 +708,6 @@ namespace SoftRender.Engine
             if (y1 == y2) return;
 
             // Setup auxiliary variables
-            FatVertex edge10 = p1 - p0;
-            FatVertex edge20 = p2 - p0;
-
             Vector2 edge0 = p2.position.xy - p1.position.xy;
             Vector2 edge1 = p0.position.xy - p2.position.xy;
             Vector2 edge2 = p1.position.xy - p0.position.xy;
@@ -715,9 +743,9 @@ namespace SoftRender.Engine
                         // Finish the barycentric coordinates (normalization)
                         e0 /= area; e1 /= area; e2 /= area;
 
-                        current.Interpolate(p0, edge10, edge20, e1, e2);
+                        current.InterpolatePC(p0, p1, p2, e0, e1, e2);
 
-                        if (depthTestAndSet(ref depthBuffer, idx, current.position.z))
+                        if (depthTestAndSet(ref depthBuffer, idx, 1.0f / current.position.z))
                         {
                             Color c = fragmentProgram(current);
                             data[idx] = blendFunction((Color32)c, data[idx]);
@@ -727,7 +755,7 @@ namespace SoftRender.Engine
             });
         }
 
-        bool Load(string filename)
+        public bool Load(string filename)
         {
             try
             {

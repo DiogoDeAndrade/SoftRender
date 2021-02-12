@@ -6,7 +6,7 @@ namespace SoftRender.UnityApp
 {
     static public class Resources
     {
-        static List<Resource> resources = new List<Resource>();
+        static Dictionary<string, Resource> resources = new Dictionary<string, Resource>();
 
         public static T Load<T>(string filename) where T : Resource
         {
@@ -15,12 +15,15 @@ namespace SoftRender.UnityApp
             try
             {
                 // Select loader based on file extension
-                string extension = Path.GetExtension(filename);
+                string extension = Path.GetExtension(filename).ToLower();
 
                 switch (extension)
                 {
                     case ".obj":
                         ret = LoadObj(filename);
+                        break;
+                    case ".png":
+                        ret = LoadPNG(filename);
                         break;
                     default:
                         Debug.Log("Unknown file type " + filename + "!");
@@ -29,7 +32,7 @@ namespace SoftRender.UnityApp
 
                 if (ret != null)
                 {
-                    resources.Add(ret);
+                    resources.Add(ret.name, ret);
                 }
             }
             catch (System.Exception e)
@@ -37,7 +40,19 @@ namespace SoftRender.UnityApp
                 Debug.Log("Failed to load file " + filename + ":" + e.Message);
             }
 
-            return (T)ret;
+            return ret as T;
+        }
+
+        static public void Add(string name, Resource ret)
+        {
+            resources.Add(ret.name, ret);
+        }
+
+        static public void Add(string name, Material mat)
+        {
+            var matRes = new MaterialResource(name, mat);
+
+            resources.Add(name, matRes);
         }
 
         static Mesh LoadObj(string filename)
@@ -225,6 +240,19 @@ namespace SoftRender.UnityApp
             }
 
             return newMaterial;
+        }
+
+        static Texture LoadPNG(string filename)
+        {
+            Texture ret = new Texture(filename);
+
+            if (!ret.Load(filename))
+            {
+                Debug.Log("Failed to read texture " + filename + "!");
+                return null;
+            }
+
+            return ret;
         }
     }
 }

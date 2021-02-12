@@ -31,7 +31,8 @@ namespace SoftRender.Samples.UnityApp.DepthBuffer
                 meshRenderer.material = new Material
                 {
                     isWireframe = false,
-                    baseColor = Color.yellow
+                    baseColor = Color.yellow,
+                    shader = new Shaders.VertexColor()
                 };
                 meshFilter.mesh = mesh;
             }

@@ -232,7 +232,9 @@ namespace SoftRender.UnityApp
                     vertexProgram(sourceStream[idx], ref vertexStream[idx]);
                     vertexStream[idx].position.x = (vertexStream[idx].position.x / vertexStream[idx].position.w) * halfWidth + halfWidth;
                     vertexStream[idx].position.y = (-vertexStream[idx].position.y / vertexStream[idx].position.w) * halfHeight + halfHeight;
-                    vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
+                    vertexStream[idx].position.z = 1.0f / vertexStream[idx].position.z;
+                    vertexStream[idx].MultiplyAttributes(vertexStream[idx].position.z);
+                    //vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
 
                     idx++;
                 }
@@ -244,7 +246,9 @@ namespace SoftRender.UnityApp
                 vertexProgram(sourceStream[idx], ref vertexStream[idx]);
                 vertexStream[idx].position.x = (vertexStream[idx].position.x / vertexStream[idx].position.w) * halfWidth + halfWidth;
                 vertexStream[idx].position.y = (-vertexStream[idx].position.y / vertexStream[idx].position.w) * halfHeight + halfHeight;
-                vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
+                vertexStream[idx].position.z = 1.0f / vertexStream[idx].position.z;
+                vertexStream[idx].MultiplyAttributes(vertexStream[idx].position.z);
+                //vertexStream[idx].position.z = (vertexStream[idx].position.z / vertexStream[idx].position.w);
             }
 
             while (!transformStage.IsCompleted) { ; }
@@ -255,7 +259,7 @@ namespace SoftRender.UnityApp
                 vertexProgram(sourceStream[i], ref vertexStream[i]);
                 vertexStream[i].position.x = (vertexStream[i].position.x / vertexStream[i].position.w) * halfWidth + halfWidth;
                 vertexStream[i].position.y = (-vertexStream[i].position.y / vertexStream[i].position.w) * halfHeight + halfHeight;
-                vertexStream[i].position.z = (vertexStream[i].position.z / vertexStream[i].position.w);
+                //vertexStream[i].position.z = (vertexStream[i].position.z / vertexStream[i].position.w);
             }
 #endif
 

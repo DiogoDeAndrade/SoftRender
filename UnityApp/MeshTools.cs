@@ -14,6 +14,7 @@ namespace SoftRender.UnityApp
             List<Vector3> triangle_normals = new List<Vector3>();
             List<float> triangle_areas = new List<float>();
             List<List<int>> triangles_per_vertex = new List<List<int>>();
+            for (int i = 0; i < vertices.Length; i++) triangles_per_vertex.Add(new List<int>());
 
             for (int i = 0; i < indices.Length; i += 3)
             {
@@ -37,6 +38,10 @@ namespace SoftRender.UnityApp
             }
 
             List<Vector3> normals = new List<Vector3>();
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                normals.Add(Vector3.zero);
+            }
 
             if (area_weight)
             {
@@ -85,6 +90,7 @@ namespace SoftRender.UnityApp
             List<Vector3> triangle_binormals = new List<Vector3>();
             List<float> triangle_areas = new List<float>();
             List<List<int>> triangles_per_vertex = new List<List<int>>();
+            for (int i = 0; i < vertices.Length; i++) triangles_per_vertex.Add(new List<int>());
 
             for (int i = 0; i < indices.Length; i += 3)
             {
@@ -133,6 +139,12 @@ namespace SoftRender.UnityApp
             List<Vector3> normals = new List<Vector3>();
             List<Vector3> tangents = new List<Vector3>();
             List<Vector3> binormals = new List<Vector3>();
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                normals.Add(Vector3.zero);
+                tangents.Add(Vector3.zero);
+                binormals.Add(Vector3.zero);
+            }
 
             if (area_weight)
             {

@@ -115,7 +115,7 @@ namespace SoftRender.UnityApp
             {
                 for (int x = 0; x < vertex_per_side; x++)
                 {
-                    Vector2 uv = new Vector2(uv_scale.x * uv_delta * x, uv_scale.y * uv_delta * y);
+                    Vector2 uv = new Vector2(uv_scale.x * uv_delta * x, uv_scale.y * (1 - (uv_delta * y)));
 
                     Vector3 v = o + new Vector3(x * tri_size, 0, y * tri_size);
                     vertices.Add(v);
@@ -166,43 +166,43 @@ namespace SoftRender.UnityApp
             List<int> indices = new List<int>();
 
             // Front
-            AddQuad(new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(1.0f, -1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(1.0f, -1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(0.0f, 1.0f),
+                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f), new Vector2(1.0f, 0.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
             // Back
-            AddQuad(new Vector3(1.0f, -1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(1.0f, -1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(0.0f, 1.0f),
+                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f), new Vector2(1.0f, 0.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
             // Top
-            AddQuad(new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f),
+                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
 
             // Bottom
-            AddQuad(new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(1.0f, -1.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(1.0f, -1.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(1.0f, -1.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(1.0f, 0.0f),
+                    new Vector3(1.0f, -1.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector2(0.0f, 1.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
 
             // Right
-            AddQuad(new Vector3(1.0f, -1.0f, 1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(1.0f, -1.0f, -1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(1.0f, -1.0f, 1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(1.0f, -1.0f, -1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(0.0f, 1.0f),
+                    new Vector3(1.0f, 1.0f, -1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f, 0.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
 
             // Left
-            AddQuad(new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(0.0f, 1.0f),
-                    new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(1.0f, 1.0f),
-                    new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(1.0f, 0.0f),
-                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(0.0f, 0.0f),
+            AddQuad(new Vector3(-1.0f, -1.0f, -1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(1.0f, 1.0f),
+                    new Vector3(-1.0f, -1.0f, 1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(0.0f, 1.0f),
+                    new Vector3(-1.0f, 1.0f, 1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(0.0f, 0.0f),
+                    new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(-1.0f, 0.0f, 0.0f), new Vector2(1.0f, 0.0f),
                     ref vertices, ref normals, ref uvs, ref indices);
 
             mesh.Clear();

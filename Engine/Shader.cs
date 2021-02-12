@@ -15,5 +15,13 @@ namespace SoftRender.Engine
 
         public abstract VertexProgram GetVertexProgram();
         public abstract FragmentProgram GetFragmentProgram();
+
+        static public Color PointSample(Bitmap bitmap, Vector2 uv)
+        {
+            int x = Mathf.FloorToInt(Mathf.Fract(uv.x) * (bitmap.width - 1));
+            int y = Mathf.FloorToInt(Mathf.Fract(uv.y) * (bitmap.height - 1));
+
+            return (Color)bitmap.data[x + y * bitmap.width];
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace SoftRender.Engine
         public float    specIntensity = 0.0f;
         public Shader   shader;
         public string   name;
+        public Bitmap   albedo;
 
         public CullMode cullMode
         {
