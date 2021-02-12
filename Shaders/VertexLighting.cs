@@ -40,6 +40,9 @@ namespace SoftRender.Shaders
             Color lighting = Color.black;
             foreach (var light in lights)
             {
+                // Only point light supported
+                if (light.type != LightType.Point) continue;
+
                 var toLight = light.transform.position - worldPos;
                 var attenuation = 10 / toLight.magnitudeSquared;
 

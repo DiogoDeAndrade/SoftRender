@@ -7,8 +7,6 @@ namespace SoftRender.Samples.UnityApp.PixelLighting
 {
     class PixelLighting : SoftRender.UnityApp.Application
     {
-        GameObject lightObject;
-
         public PixelLighting()
         {
             name = "Pixel Lighting Sample - Unity Framework";
@@ -49,7 +47,7 @@ namespace SoftRender.Samples.UnityApp.PixelLighting
             }
 
             // Create a light
-            lightObject = new GameObject("Light");
+            var lightObject = new GameObject("Light");
             lightObject.transform.position = new Vector3(4.0f, 2.0f, 0.0f);
             lightObject.AddComponent<Light>();
             var rotationComponent = lightObject.AddComponent<RotateAroundXZ>();

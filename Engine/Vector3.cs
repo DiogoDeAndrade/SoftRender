@@ -85,5 +85,11 @@ namespace SoftRender.Engine
         public static Vector3 left = new Vector3(-1, 0, 0);
         public static Vector3 forward = new Vector3(0, 0, 1);
         public static Vector3 back = new Vector3(0, 0, -1);
+
+        public static implicit operator Vector3(Color v)
+        {
+            return new Vector3(v.r, v.g, v.b);
+        }
+
     }
 }

@@ -38,6 +38,7 @@ namespace SoftRender.Engine
         public Shader   shader;
         public string   name;
         public Bitmap   albedo;
+        public Bitmap   normal;
 
         public CullMode cullMode
         {

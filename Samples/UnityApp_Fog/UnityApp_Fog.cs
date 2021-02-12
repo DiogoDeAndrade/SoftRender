@@ -8,8 +8,6 @@ namespace SoftRender.Samples.UnityApp.Fog
 {
     class Fog : SoftRender.UnityApp.Application
     {
-        GameObject lightObject;
-
         public Fog()
         {
             name = "Fog Sample - Unity Framework";

@@ -57,6 +57,9 @@ namespace SoftRender.Shaders
             Color lighting = scene.ambientLight * material.baseColor;
             foreach (var light in lights)
             {
+                // Only point light supported
+                if (light.type != LightType.Point) continue;
+
                 // Remember: tangent stores world position of the vertex, and binormal stores the to camera vector
                 var toLight = light.transform.position - src.tangent;
                 var magnitude = toLight.magnitude;

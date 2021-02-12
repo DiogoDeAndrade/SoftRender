@@ -33,16 +33,17 @@ namespace SoftRender.Engine
         {
             return new Color(v.r / 255.0f, v.g / 255.0f, v.b / 255.0f, v.a / 255.0f);
         }
-        public static explicit operator Color(Vector3 v)
+        public static implicit operator Color(Vector3 v)
         {
             return new Color(v.x, v.y, v.z, 1.0f);
         }
-        public static explicit operator Color(Vector4 v)
+        public static implicit operator Color(Vector4 v)
         {
             return new Color(v.x, v.y, v.z, v.w);
         }
         public static Color operator +(Color a, Color b) => new Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
         public static Color operator -(Color a, Color b) => new Color(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
+        public static Color operator -(Color a, float v) => new Color(a.r - v, a.g - v, a.b - v, a.a - v);
         public static Color operator *(Color v, float s) => new Color(v.r * s, v.g * s, v.b * s, v.a * s);
         public static Color operator *(float s, Color v) => new Color(v.r * s, v.g * s, v.b * s, v.a * s);
         public static Color operator *(Color c1, Color c2) => new Color(c1.r * c2.r, c1.g * c2.g, c1.b * c2.b, c1.a * c2.a);
