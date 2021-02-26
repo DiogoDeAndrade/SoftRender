@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{A31926D2-8DFE-4053-BA11-E2368F4ADE11}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B} = {1713A04C-BF46-4A64-92DB-2D229BEB421B}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{43D90D9F-09F0-433C-98AA-D4EBF1CEFCC8}"
 EndProject
@@ -60,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnityApp_Textures", "sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnityApp_NormalMapping", "samples\UnityApp_NormalMapping\UnityApp_NormalMapping.csproj", "{152F5756-E5D0-4045-B8B9-927E7B9D4642}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mathlib", "mathlib\Mathlib.csproj", "{1713A04C-BF46-4A64-92DB-2D229BEB421B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mathlib", "Mathlib\Mathlib.csproj", "{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -384,18 +381,18 @@ Global
 		{152F5756-E5D0-4045-B8B9-927E7B9D4642}.Release|x64.Build.0 = Release|Any CPU
 		{152F5756-E5D0-4045-B8B9-927E7B9D4642}.Release|x86.ActiveCfg = Release|Any CPU
 		{152F5756-E5D0-4045-B8B9-927E7B9D4642}.Release|x86.Build.0 = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|x64.Build.0 = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Debug|x86.Build.0 = Debug|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|x64.ActiveCfg = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|x64.Build.0 = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|x86.ActiveCfg = Release|Any CPU
-		{1713A04C-BF46-4A64-92DB-2D229BEB421B}.Release|x86.Build.0 = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|x64.Build.0 = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|x64.Build.0 = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A67E965-F5DE-41DE-8AF2-FAD3ACB5B8B7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
