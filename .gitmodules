@@ -1,0 +1,3 @@
+[submodule "Mathlib"]
+	path = Mathlib
+	url = https://github.com/DiogoDeAndrade/Mathlib
