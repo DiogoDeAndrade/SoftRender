@@ -40,7 +40,7 @@ Art:
 
 * Castle model by [Lotnik][Lotnik], available under the [CC-BY3.0] license.
 * Ship model by [little killy][little killy], available under the [CC-BY3.0] license.
-* Tree model by [Aredon][Aredon]available under the [CC-BY3.0] license.
+* Tree model by [Aredon][Aredon], available under the [CC-BY3.0] license.
 
 All the text and documentation (i.e., non-code files) are made available under
 the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
