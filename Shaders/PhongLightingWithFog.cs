@@ -2,6 +2,7 @@
 using SoftRender.UnityApp;
 using SoftRender.UnityApp.SceneManagement;
 using System.Collections.Generic;
+using Mathlib;
 
 namespace SoftRender.Shaders
 {

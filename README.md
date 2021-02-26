@@ -22,6 +22,11 @@ Install sdl2, using for example apt-get:
 apt install libsdl2-dev
 ```
 
+## Other C# rasterizers
+
+After I've implemented this, I was made aware of [Rasterizr] and [softrender]. I couldn't run any of 
+them, so I can't check how they compare, but they're old projects, so they don't use the latest .NET.
+
 ## Licenses
 
 Engine code developed by [Diogo de Andrade][DAndrade] and [Nuno Fachada][NFachada]; it is made available under the [Mozilla Public License 2.0][MPLv2].
@@ -48,6 +53,8 @@ License][CC BY-NC-SA 4.0].
 [Ap2]:https://opensource.org/licenses/Apache-2.0
 [SDL2#]:https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE
 [ELee]:https://github.com/flibitijibibo
+[Rasterizr]:https://github.com/tgjones/rasterizr
+[softrender]:https://archive.codeplex.com/?p=softrender
 [Aredon]:https://opengameart.org/users/aredon
 [ImageSharp]:https://github.com/SixLabors/ImageSharp
 [DAndrade]:https://github.com/DiogoDeAndrade

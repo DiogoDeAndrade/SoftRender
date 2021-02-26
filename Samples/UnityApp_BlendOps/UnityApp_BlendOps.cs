@@ -1,6 +1,7 @@
 ﻿using SoftRender.Engine;
 using SoftRender.UnityApp;
 using SoftRender.UnityApp.Defaults;
+using Mathlib;
 
 namespace SoftRender.Samples.UnityApp.BlendOps
 {

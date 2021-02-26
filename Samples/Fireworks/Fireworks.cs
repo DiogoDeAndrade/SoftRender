@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using SoftRender.Engine;
+using Mathlib;
 
 namespace SoftRender.Samples.Fireworks
 {

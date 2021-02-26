@@ -1,4 +1,5 @@
 ﻿using SoftRender.Engine;
+using Mathlib;
 
 namespace SoftRender.Samples.Text
 {

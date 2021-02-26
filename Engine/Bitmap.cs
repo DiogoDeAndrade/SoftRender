@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Mathlib;
+using Color = Mathlib.Color;
 
 namespace SoftRender.Engine
 {

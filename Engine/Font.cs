@@ -1,6 +1,4 @@
-﻿using SixLabors.ImageSharp;
-using System;
-using System.IO;
+﻿using Mathlib;
 
 namespace SoftRender.Engine
 {

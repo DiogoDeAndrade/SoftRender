@@ -1,7 +1,7 @@
 ﻿using SoftRender.Engine;
 using SoftRender.UnityApp;
-using SoftRender.Shaders;
 using SoftRender.UnityApp.Defaults;
+using Mathlib;
 
 namespace SoftRender.Samples.UnityApp.PixelLighting
 {

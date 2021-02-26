@@ -3,6 +3,7 @@
 using SoftRender.Engine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mathlib;
 
 namespace SoftRender.UnityApp
 {

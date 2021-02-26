@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using SDL2;
+using Mathlib;
 
 namespace SoftRender.Engine
 {
