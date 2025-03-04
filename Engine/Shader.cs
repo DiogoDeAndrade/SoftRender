@@ -14,8 +14,8 @@ namespace SoftRender.Engine
 
         static public Color PointSample(Bitmap bitmap, Vector2 uv)
         {
-            int x = Mathf.FloorToInt(Mathf.Fract(uv.x) * (bitmap.width - 1));
-            int y = Mathf.FloorToInt(Mathf.Fract(uv.y) * (bitmap.height - 1));
+            int x = Mathf.FloorToInt((uv.x - (float)Mathf.Floor(uv.x)) * (bitmap.width - 1));
+            int y = Mathf.FloorToInt((uv.y - (float)Mathf.Floor(uv.y)) * (bitmap.height - 1));
 
             return (Color)bitmap.data[x + y * bitmap.width];
         }

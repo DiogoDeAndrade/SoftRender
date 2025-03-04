@@ -1,8 +1,9 @@
-﻿using SixLabors.ImageSharp;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Mathlib;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Color = Mathlib.Color;
 
 namespace SoftRender.Engine
@@ -761,33 +762,31 @@ namespace SoftRender.Engine
         {
             try
             {
-                using (Stream stream = File.OpenRead(filename))
+                using (Image<Bgra32> image = Image.Load<Bgra32>(filename))
                 {
-                    var image = Image.Load<SixLabors.ImageSharp.PixelFormats.Bgra32>(stream);
-
                     width = image.Width;
                     height = image.Height;
 
                     data = new Color32[width * height];
+
                     for (int y = 0; y < height; y++)
                     {
-                        var rowData = image.Frames.RootFrame.GetPixelRowSpan(y);
-                        var targetIndex = y * width;
+                        int targetIndex = y * width;
                         for (int x = 0; x < width; x++)
                         {
-                            data[targetIndex].Set(rowData[x].R, rowData[x].G, rowData[x].B, rowData[x].A);
+                            Bgra32 pixel = image[x, y]; // Access pixels directly
+                            data[targetIndex] = new Color32(pixel.R, pixel.G, pixel.B, pixel.A);
                             targetIndex++;
                         }
                     }
                 }
+                return true;
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Debug.Log("Failed to load " + filename + ": " + exception.Message);
+                Console.WriteLine("Error loading image: " + ex.Message);
                 return false;
             }
-
-            return true;
         }
 
         public void BlitWithAlphablend(int x, int y, Bitmap src)
